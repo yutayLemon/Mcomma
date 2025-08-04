@@ -1,7 +1,7 @@
-import { canvas,ctx } from "./canvas.js";
-
+import {drawDiv,drawWhile,drawIf} from "./draw.js"
 class Comp{
     constructor(initX,initY,icolor,lineWidth){
+        this.mode = "ideal";
         this.selected = false;
         this.pos = {x:initX,y:initY};
         this.lineWdith = lineWidth;
@@ -15,7 +15,9 @@ class Division extends Comp{
         this.radius = initradius;
         this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
     }
+    update(){
 
+    }
     draw(){
         drawDiv(this);
     }
@@ -31,6 +33,9 @@ class WhileCirc extends Comp{
         this.radiusFor = initRadiusFor;
         this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
     }
+    update(){
+        
+    }
     draw(){
         drawWhile(this);
     }
@@ -45,78 +50,40 @@ class IfCirc extends Comp{
 
         this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
     }
+    update(){
+ 
+    }
     draw(){
+        if(window.EditorState.mode == "edit"){
+            
+        }
         drawIf(this);
     }
 }
 
-class PreView extends Comp{
-    constructor(){
+class PreView{
+    constructor(color){
         console.log("Mouse Previews constructed");
+        this.pos = {};
+        this.color = color;
     }
+    update(){
+        this.pos.x = window.mousePos.x;
+        this.pos.y = window.mousePos.y;
+    }
+
     draw(){
+        if(window.EditorState.mode == "add"){
         if(window.EditorState.type == "div"){
-            drawDiv({color:"red"});
+            drawDiv(this);
+        }else if(window.EditorState.type == "whileComp"){
+            drawWhile(this);
+        }else if(window.EditorState.type == "ifComp"){
+            drawIf(this);
         }
     }
-}
+    }
 
-function drawDiv({
-    color = "black",
-    pos = {x:0,y:0},
-    radius = 10,
-    lineWdith=1
-} = {}){
-        ctx.beginPath();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = lineWdith;
-        ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-}
-
-function drawWhile({
-    color = "black",
-    pos = {x:0,y:0},
-    radiusDo = 10,
-    radiusFor = 5,
-    lineWdith=1,
-    centerDo = {x:-5,y:0},
-    centerFor = {x:5,y:0}
-} = {}){
-        ctx.beginPath();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = lineWdith;
-        ctx.arc(centerDo.x, centerDo.y, radiusDo, 0, 2 * Math.PI);
-        ctx.arc(centerFor.x, centerFor.y, radiusFor, 0, 2 * Math.PI);
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-}
-
-function drawIf(){
-        ctx.beginPath({
-            color = "black",
-            pos = {x:0,y:0},
-            NumSections = 3,
-            lineWdith=1,
-            TipHight = 5,
-            radius = 10
-        } = {});
-        ctx.strokeStyle =  color;
-        ctx.lineWidth =  lineWdith;
-        ctx.arc( pos.x,  pos.y,  radiusDo, 0, 2 * Math.PI);
-        ctx.moveTo( pos.x, pos.y+ radius);
-        let SectRadi = Math.cos(Math.PI/( NumSections*2))* radius;
-        for(let i = 0;i< NumSections;i++){
-            ctx.moveTo(Math.cos(SectRadi*2*i - SectRadi)* radius,Math.sin(SectRadi*2*i - SectRadi)* radius);
-            ctx.lineTo(Math.cos(SectRadi*2*i - SectRadi)*( radius+ TipHight),Math.sin(SectRadi*2*i - SectRadi)*( radius+ TipHight));
-            ctx.lineTo(Math.cos(SectRadi*2*i + SectRadi)* radius,Math.sin(SectRadi*2*i - SectRadi)* radius);
-        }
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 1;
-        ctx.stroke();
 }
 
 

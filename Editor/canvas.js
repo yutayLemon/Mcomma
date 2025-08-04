@@ -3,10 +3,19 @@ const PattCanvas = document.querySelector(".PattenCanvas");
 PattCanvas.width = 30;
 PattCanvas.height = 30;
 const pctx = PattCanvas.getContext("2d");
-canvas.width = 1000;
-canvas.height = 1000;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d");
 
+function CanvasResize(){
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
+
+function initResize(){
+    CanvasResize();
+    window.addEventListener("resize",CanvasResize);
+}
 
 function UpdateCanvas(Components){
     ctx.clearRect(0, 0, canvas.width, canvas.height);   
@@ -49,4 +58,4 @@ function Grid(len){
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-export{canvas,ctx,UpdateCanvas,Grid};
+export{canvas,ctx,UpdateCanvas,Grid,initResize};

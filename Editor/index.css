@@ -1,13 +1,10 @@
 .MainCanvas{
-     width:100vw;
-     height:100vw;
      padding: 0px;
      margin: 0px;
      position: absolute;
      left: 0px;
      top: 0px;
      cursor: crosshair;
-
 }
 
 .Controls{
