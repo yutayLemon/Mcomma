@@ -15,6 +15,10 @@ function drawDiv({
         ctx.lineWidth = 1;
 }
 
+function drawInteractDiv(x,y){
+    ctx.drawImage(assets.move.canvas,x,y,30,30);
+}
+
 function drawWhile({
     color = "black",
     pos = {x:0,y:0},
@@ -58,8 +62,9 @@ function drawIf(){
         ctx.lineWidth = 1;
 }
 
-let assets = [];
-function LoadMoveToggle(){
+let assets = {};
+window.assets = assets;
+function LoadMoveToggle(link){
     return new Promise((resolve,reject)=>{
     let LoadCanvas = document.createElement("canvas");
     LoadCanvas.setAttribute("hidden","true");
@@ -72,12 +77,22 @@ function LoadMoveToggle(){
         resolve({img:LoadImg,ctx:LoadCtx,canvas:LoadCanvas});
     };
     LoadImg.onerror = (err)=>{reject(err)};
-    LoadImg.src = "./SVG/move.svg"; // from https://www.svgrepo.com/svg/533693/move-alt
+    LoadImg.src = link;//"./SVG/move.svg"; // from https://www.svgrepo.com/svg/533693/move-alt
 })
 }
 
-function DrawMoveToggle(){
+function InitAssets(){
+        let MoveAssert = LoadMoveToggle("./SVG/move.svg"); // from https://www.svgrepo.com/svg/533693/move-alt
+        let ExpandAssert = LoadMoveToggle("./SVG/expand.svg"); // from https://www.svgrepo.com/svg/357722/expand-left
 
+        return Promise.all([MoveAssert,ExpandAssert])
+        .then(([objMove,objExpand])=>{
+            assets.move = objMove;
+            assets.Expand = objExpand;
+            return "done";
+        }).catch((err)=>{
+            throw err;
+        });
 }
 
-export {drawDiv,drawWhile,drawIf};
+export {drawDiv,drawInteractDiv,drawWhile,drawIf,InitAssets};

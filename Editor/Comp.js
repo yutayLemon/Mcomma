@@ -1,4 +1,4 @@
-import {drawDiv,drawWhile,drawIf} from "./draw.js"
+import {drawDiv,drawInteractDiv,drawWhile,drawIf} from "./draw.js"
 class Comp{
     constructor(initX,initY,icolor,lineWidth){
         this.mode = "ideal";
@@ -19,6 +19,9 @@ class Division extends Comp{
 
     }
     draw(){
+        if(window.EditorState.mode == "edit"){
+            drawInteractDiv(this.pos.x,this.pos.y);
+        }
         drawDiv(this);
     }
 }
@@ -54,9 +57,6 @@ class IfCirc extends Comp{
  
     }
     draw(){
-        if(window.EditorState.mode == "edit"){
-            
-        }
         drawIf(this);
     }
 }
