@@ -15,8 +15,12 @@ function drawDiv({
         ctx.lineWidth = 1;
 }
 
-function drawInteractDiv(x,y){
-    ctx.drawImage(assets.move.canvas,x,y,30,30);
+function drawInteractDiv(x,y,r){
+    let MoveIntDim = 20;
+    let ExpandIntDim = 20;
+    ctx.drawImage(assets.move.canvas,x-MoveIntDim*0.5,y-MoveIntDim*0.5,MoveIntDim,MoveIntDim);
+    ctx.drawImage(assets.Expand.canvas,x-ExpandIntDim*0.5-Math.cos(Math.PI*0.25)*r,y-ExpandIntDim*0.5-Math.cos(Math.PI*0.25)*r,ExpandIntDim,ExpandIntDim);
+    
 }
 
 function drawWhile({
