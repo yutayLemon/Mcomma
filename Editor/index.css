@@ -1,6 +1,5 @@
 .MainCanvas{
-    border: 2px solid red;
-     width:80vw;
+     width:100vw;
      height:100vw;
      padding: 0px;
      margin: 0px;
@@ -12,9 +11,28 @@
 }
 
 .Controls{
-    border: 2px solid red;
+    background-color: rgba(0, 0, 0, 0.2);
     height: 100vw;
     width: 20vw;
     padding: 0px;
     margin: 0px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.CompSelect{
+    width: 100%;
+    height: 20%;
+    background-color: bisque;
+    opacity: 50%;
+    display: flex;
+}
+
+.Comp{
+    border: 2px solid green;
+    width: 30%;
+    height: 30%;
+    background-color: blue;
+    opacity: 45%;
 }

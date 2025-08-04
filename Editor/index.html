@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="./index.css">
     </head>
     <body>
 
+        <canvas class="PattenCanvas" hidden></canvas>
         <canvas class="MainCanvas"></canvas>
-        
-        <script src="index.js"></script>
+        <script src="Global.js"></script>
+        <script type="module" src="./Comp.js"></script>
+        <script type="module" src="./index.js"></script>
+        <script type="module" src="./canvas.js"></script>
+        <script type="module" src="./Controles.js"></script>
+        <div class="Controls">
+            <div class="CompSelect">
+                <div class="Comp" id="div"></div>
+                <div class="Comp" id="whileComp"></div>
+                <div class="Comp" id="ifComp"></div>
+            </div>
+        </div>
     </body>
 </html>
