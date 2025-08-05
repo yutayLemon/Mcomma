@@ -1,12 +1,14 @@
 import {drawDiv,drawInteractDiv,drawWhile,drawIf} from "./draw.js"
 import {circleOverlap} from "./overlap.js"
+import { canvas,ctx } from "./canvas.js"
+
 
 class Comp{
     constructor(initX,initY,icolor,lineWidth){
         this.mode = "ideal";
         this.selected = false;
         this.pos = {x:initX,y:initY};//relative ??
-        this.Global = {x:initX,y:initY};
+        this.Global = {x:initX,y:initY};//Global
         this.lineWdith = lineWidth;
         this.color = icolor;
         this.interactives = [];
@@ -26,8 +28,7 @@ class Comp{
     }
     updateChild(){
         for(const item of this.children){
-            item.updateSelf();
-            item.updateChild();
+            item.update();
         }
     }
 
@@ -41,8 +42,7 @@ class Comp{
     }
     drawChild(){
         for(const item of this.children){
-            item.drawSelf();
-            item.drawChild();
+            item.draw();
         }
     }
     globalPos(){
@@ -56,44 +56,72 @@ class Comp{
             }
         }
     }
+
+    colideEvent(){
+        
+    }
+
+    colide(point,r){
+        let ColideRes = this.colideSelf(point,r);
+        if(ColideRes.Exact){
+            //runn's if colide
+            colideEvent();
+        }
+        if(ColideRes.buffer){
+            //clides with a buffer zone
+            this.colideChildren();
+        }
+    }
+    colideSelf(){
+        return 0;
+    }
+    colideChildren(){
+        for(const item of this.children){
+            item.colide();
+        }
+    }
 }
 
 class ExtendInter extends Comp{
-    constructor(initX,initY,icolor,lineWidth,initradius){
+    constructor(initX,initY,icolor,lineWidth){
         super(initX,initY,icolor,lineWidth);
-        this.radius = initradius;
-        this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
+        this.ExpandIntRadi = 10;
     }
-    colide(point,r){//takes the point and radius and returns if it is coliding with the object
-        
+    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
+        return circleOverlap(point,this.Global,r,this.ExpandIntRadi);
+    }
+    colideEvent(){
+        console.log("colide with Extend");
     }
     updateSelf(){
 
     }
     drawSelf(){
         if(window.EditorState.mode == "edit"){
-            let ExpandIntDim = 20;
-            ctx.drawImage(assets.Expand.canvas,x-ExpandIntDim*0.5-Math.cos(Math.PI*0.25)*r,y-ExpandIntDim*0.5-Math.cos(Math.PI*0.25)*r,ExpandIntDim,ExpandIntDim);
+            let ExpandIntDim = 2*this.ExpandIntRadi;
+            ctx.drawImage(assets.Expand.canvas,this.Global.x-this.ExpandIntRadi,this.Global.y-this.ExpandIntRadi,ExpandIntDim,ExpandIntDim);
         }
     }
 }
 
 class MoveInter extends Comp{
-    constructor(initX,initY,icolor,lineWidth,initradius){
-        super(initX,initY,icolor,lineWidth);
-        this.radius = initradius;
-        this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
+    constructor(initX,initY){
+        super(initX,initY,"black",1);
+        this.MoveIntRadi = 10;
     }
-    colide(point,r){//takes the point and radius and returns if it is coliding with the object
-        
+    colideEvent(){
+        console.log("colide with Extend");
+    }
+    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
+        return circleOverlap(point,this.Global,r,this.ExpandIntRadi);
     }
     updateSelf(){
 
     }
     drawSelf(){
         if(window.EditorState.mode == "edit"){
-            let MoveIntDim = 20;
-            ctx.drawImage(assets.move.canvas,x-MoveIntDim*0.5,y-MoveIntDim*0.5,MoveIntDim,MoveIntDim);
+            let MoveIntDim = this.MoveIntRadi*2;
+            ctx.drawImage(assets.move.canvas,this.Global.x-this.MoveIntRadi,this.Global.y-this.MoveIntRadi,MoveIntDim,MoveIntDim);
         }
     }
 }
@@ -102,18 +130,17 @@ class Division extends Comp{
     constructor(initX,initY,icolor,lineWidth,initradius){
         super(initX,initY,icolor,lineWidth);
         this.radius = initradius;
-        this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
     }
-    colide(point,r){//takes the point and radius and returns if it is coliding with the object
-        return circleOverlap(point,this.pos,this.radius,r);
+    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
+        return circleOverlap(point,this.Global,this.radius,r);
+    }
+    colideEvent(){
+        console.log("colide with Div");
     }
     updateSelf(){
 
     }
     drawSelf(){
-        if(window.EditorState.mode == "edit"){
-            drawInteractDiv(this.pos.x,this.pos.y,this.radius);
-        }
         drawDiv(this);
     }
 }
@@ -128,7 +155,7 @@ class WhileCirc extends Comp{
         this.radiusFor = initRadiusFor;
         this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
     }
-    colide(point,r){//takes the point and radius and returns if it is coliding with the object
+    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.centerDo,this.radiusDo,r) || circleOverlap(point,this.centerFor,this.radiusFor,r);
     }
     updateSelf(){
@@ -148,8 +175,8 @@ class IfCirc extends Comp{
 
         this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
     }
-    colide(point,r){//takes the point and radius and returns if it is coliding with the object
-        return circleOverlap(point,this.pos,this.radius,r);//ADD detection for traiangles
+    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
+        return circleOverlap(point,this.Global,this.radius,r);//ADD detection for traiangles
     }
     updateSelf(){
  
@@ -165,12 +192,12 @@ class PreView{
         this.pos = {};
         this.color = color;
     }
-    updateSelf(){
+    update(){
         this.pos.x = window.mousePos.x;
         this.pos.y = window.mousePos.y;
     }
 
-    drawSelf(){
+    draw(){
         if(window.EditorState.mode == "add"){
         if(window.EditorState.type == "div"){
             drawDiv(this);
@@ -186,4 +213,4 @@ class PreView{
 
 
 
-export {Comp,Division,WhileCirc,IfCirc,PreView};
+export {Comp,Division,WhileCirc,IfCirc,PreView,ExtendInter,MoveInter};

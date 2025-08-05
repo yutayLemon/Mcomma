@@ -25,8 +25,9 @@ function main(){
     Componets.push(
        new Division(100,100,"blue",1,50)
     );
-    Componets[0].draw();
-    Componets[0].update = function(){
+    Componets[0].drawSelf();
+    Componets[0].updateSelf = function(){
+       // console.log("blue updating!!");
         this.pos.x += 1.5;
         this.pos.y += 1;
     }

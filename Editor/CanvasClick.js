@@ -1,13 +1,25 @@
 import {canvas,ctx} from "./canvas.js";
-import { Division } from "./Comp.js";
+import { Division ,ExtendInter,MoveInter} from "./Comp.js";
 
 function initCanvasClick(){
     canvas.addEventListener("click",function(e){
         if(window.EditorState.mode == "add"){
-            window.EditorState.mode = "edit";
+            if(window.EditorState.type == "div"){
+            let NewDiv = new Division(e.x,e.y,"black",1,30);
+            let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewDiv.radius,
+                                            Math.sin(Math.PI*0.25)*NewDiv.radius);
+            let NewMove = new MoveInter(0,0);
+            NewDiv.addChild(NewExtend);
+            NewDiv.addChild(NewMove);                              
             window.Comp.push(
-                new Division(e.x,e.y,"black",1,30)
+                NewDiv
             );
+            window.EditorState.mode = "edit";
+            }
+            //TODO division detection
+
+
+            
         }
     });
 }
@@ -18,6 +30,13 @@ function initCanvasHover(){
     canvas.addEventListener("mousemove",function(e){
         window.mousePos.x = e.x;
         window.mousePos.y = e.y;
+
+        if(window.Comp != undefined){
+        for(const item of window.Comp){
+            item.colide(window.mousePos,0);
+            console.log(item);
+        }
+        }
     });
 }
 

@@ -2,14 +2,14 @@ import { canvas,ctx } from "./canvas.js";
 
 function drawDiv({
     color = "black",
-    pos = {x:0,y:0},
+    Global = {x:0,y:0},
     radius = 10,
     lineWdith=1
 } = {}){
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.lineWidth = lineWdith;
-        ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
+        ctx.arc(Global.x, Global.y, radius, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.strokeStyle = "black";
         ctx.lineWidth = 1;
@@ -25,7 +25,7 @@ function drawInteractDiv(x,y,r){
 
 function drawWhile({
     color = "black",
-    pos = {x:0,y:0},
+    Global = {x:0,y:0},
     radiusDo = 10,
     radiusFor = 5,
     lineWdith=1,
@@ -45,7 +45,7 @@ function drawWhile({
 function drawIf(){
         ctx.beginPath({
             color = "black",
-            pos = {x:0,y:0},
+            Global = {x:0,y:0},
             NumSections = 3,
             lineWdith=1,
             TipHight = 5,
@@ -53,8 +53,8 @@ function drawIf(){
         } = {});
         ctx.strokeStyle =  color;
         ctx.lineWidth =  lineWdith;
-        ctx.arc( pos.x,  pos.y,  radiusDo, 0, 2 * Math.PI);
-        ctx.moveTo( pos.x, pos.y+ radius);
+        ctx.arc( Global.x,  Global.y,  radiusDo, 0, 2 * Math.PI);
+        ctx.moveTo( Global.x, Global.y+ radius);
         let SectRadi = Math.cos(Math.PI/( NumSections*2))* radius;
         for(let i = 0;i< NumSections;i++){
             ctx.moveTo(Math.cos(SectRadi*2*i - SectRadi)* radius,Math.sin(SectRadi*2*i - SectRadi)* radius);
