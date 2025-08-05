@@ -20,19 +20,20 @@ Promise.all([InitAssets()])
 })
 
 function main(){
-    var Componets = [];
+    var Componets = {};
+    Componets.Physical = [];
+    Componets.Vertial = [];
     window.Componets = Componets;//DEBUG
-    Componets.push(
+    Componets.Physical.push(
        new Division(100,100,"blue",1,50)
     );
-    Componets[0].drawSelf();
-    Componets[0].updateSelf = function(){
+    Componets.Physical[0].updateSelf = function(){
        // console.log("blue updating!!");
         this.pos.x += 1.5;
         this.pos.y += 1;
     }
 
-    Componets.push(new PreView("red"));
+    Componets.Vertial.push(new PreView("red"));
 
 
 

@@ -1,7 +1,8 @@
 window.EditorState = {
     mode:"add",//move to move ,add:to add componets
     Subject:"NULL",
-    type:"NULL"
+    type:"NULL",
+    CursorState:"ideal"
 }
 
 window.mousePos = {

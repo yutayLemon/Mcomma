@@ -56,9 +56,12 @@ class Comp{
             }
         }
     }
-
+    NotColide(point,r){
+    }
     colideEvent(point,r){
-        
+    }
+    PublicColideEvent(point,r){
+        window.EditorState.CursorState = "hover";
     }
 
     colide(point,r){
@@ -66,6 +69,9 @@ class Comp{
         if(ColideRes.Exact){
             //runn's if colide
             this.colideEvent(point,r);
+            this.PublicColideEvent(point,r);
+        }else{
+            this.NotColide(point,r);
         }
         if(ColideRes.buffer){
             //clides with a buffer zone
@@ -110,7 +116,7 @@ class MoveInter extends Comp{
         this.MoveIntRadi = 10;
     }
     colideEvent(){
-        console.log("colide with Extend");
+        console.log("colide with move");
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,r,this.ExpandIntRadi);
@@ -133,6 +139,8 @@ class Division extends Comp{
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,this.radius,r);
+    }
+    NotColide(point,r){
     }
     colideEvent(){
         console.log("colide with Div");

@@ -19,9 +19,18 @@ function initResize(){
 
 function UpdateCanvas(Components){
     ctx.clearRect(0, 0, canvas.width, canvas.height);   
+    if(window.EditorState.CursorState == "hover"){
+        canvas.style.cursor = "pointer";
+    }else{
+        canvas.style.cursor = "crosshair";
+    }
     Grid(30); 
-    updateComponets(Components);
-    DrawComponets(Components);
+    updateComponets(Components.Physical);
+    updateComponets(Components.Vertial);
+    
+    DrawComponets(Components.Physical);
+    DrawComponets(Components.Vertial);
+    
     requestAnimationFrame(()=>{UpdateCanvas(Components)});
 }
 

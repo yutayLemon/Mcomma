@@ -11,7 +11,7 @@ function initCanvasClick(){
             let NewMove = new MoveInter(0,0);
             NewDiv.addChild(NewExtend);
             NewDiv.addChild(NewMove);                              
-            window.Componets.push(
+            window.Componets.Physical.push(
                 NewDiv
             );
             window.EditorState.mode = "edit";
@@ -31,8 +31,8 @@ function initCanvasHover(){
         window.mousePos.x = e.x;
         window.mousePos.y = e.y;
 
-        if(window.Componets != undefined){
-            for(const item of window.Componets){
+        if(window.Componets != undefined && window.Componets.Physical != undefined){
+            for(const item of window.Componets.Physical){
                 if (typeof item.colide === "function") {
                     item.colide(window.mousePos, 0);
                 } /*else {console.warn("Item missing colide():", item);}}*/
