@@ -21,7 +21,7 @@ Promise.all([InitAssets()])
 
 function main(){
     var Componets = [];
-    window.Comp = Componets;//DEBUG
+    window.Componets = Componets;//DEBUG
     Componets.push(
        new Division(100,100,"blue",1,50)
     );

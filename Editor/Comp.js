@@ -57,7 +57,7 @@ class Comp{
         }
     }
 
-    colideEvent(){
+    colideEvent(point,r){
         
     }
 
@@ -65,19 +65,19 @@ class Comp{
         let ColideRes = this.colideSelf(point,r);
         if(ColideRes.Exact){
             //runn's if colide
-            colideEvent();
+            this.colideEvent(point,r);
         }
         if(ColideRes.buffer){
             //clides with a buffer zone
-            this.colideChildren();
+            this.colideChildren(point,r);
         }
     }
-    colideSelf(){
+    colideSelf(point,r){
         return 0;
     }
-    colideChildren(){
+    colideChildren(point,r){
         for(const item of this.children){
-            item.colide();
+            item.colide(point,r);
         }
     }
 }

@@ -11,7 +11,7 @@ function initCanvasClick(){
             let NewMove = new MoveInter(0,0);
             NewDiv.addChild(NewExtend);
             NewDiv.addChild(NewMove);                              
-            window.Comp.push(
+            window.Componets.push(
                 NewDiv
             );
             window.EditorState.mode = "edit";
@@ -31,13 +31,14 @@ function initCanvasHover(){
         window.mousePos.x = e.x;
         window.mousePos.y = e.y;
 
-        if(window.Comp != undefined){
-        for(const item of window.Comp){
-            item.colide(window.mousePos,0);
-            console.log(item);
+        if(window.Componets != undefined){
+            for(const item of window.Componets){
+                if (typeof item.colide === "function") {
+                    item.colide(window.mousePos, 0);
+                } /*else {console.warn("Item missing colide():", item);}}*/
         }
-        }
-    });
+    }
+});
 }
 
 
