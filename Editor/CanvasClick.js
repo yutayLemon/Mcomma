@@ -30,14 +30,6 @@ function initCanvasHover(){
     canvas.addEventListener("mousemove",function(e){
         window.mousePos.x = e.x;
         window.mousePos.y = e.y;
-
-        if(window.Componets != undefined && window.Componets.Physical != undefined){
-            for(const item of window.Componets.Physical){
-                if (typeof item.colide === "function") {
-                    item.colide(window.mousePos, 0);
-                } /*else {console.warn("Item missing colide():", item);}}*/
-        }
-    }
 });
 }
 

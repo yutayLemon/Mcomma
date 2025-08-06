@@ -88,6 +88,34 @@ class Comp{
     }
 }
 
+
+class Rect extends Comp{
+    constructor(initX,initY,icolor,r){
+        super(initX,initY,icolor,1);
+        this.radi = r;
+    }
+    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
+        return circleOverlap(point,this.Global,r,this.ExpandIntRadi);
+    }
+    colideEvent(){
+        this.color = "green";
+    }
+    updateSelf(){
+
+    }
+    drawSelf(){
+        if(window.EditorState.debug == true){
+            ctx.beginPath();
+            ctx.fillStyle = this.color;
+            ctx.lineWidth = this.lineWdith;
+            ctx.arc(this.Global.x, this.Global.y, this.radi, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 1;
+        }
+    }
+}
+
 class ExtendInter extends Comp{
     constructor(initX,initY,icolor,lineWidth){
         super(initX,initY,icolor,lineWidth);
@@ -221,4 +249,4 @@ class PreView{
 
 
 
-export {Comp,Division,WhileCirc,IfCirc,PreView,ExtendInter,MoveInter};
+export {Comp,Division,WhileCirc,IfCirc,PreView,ExtendInter,MoveInter,Rect};

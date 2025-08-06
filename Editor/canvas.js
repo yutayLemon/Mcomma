@@ -18,22 +18,39 @@ function initResize(){
 }
 
 function UpdateCanvas(Components){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);   
+    window.EditorState.debug = true;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);  
+    UpdateCanvasState(Components);
+    Grid(30); 
+
+    updateComponets(Components.Physical);
+    updateComponets(Components.Vertial);
+    updateComponets(Componets.DebugPhysical);
+    
+    DrawComponets(Components.Physical);
+    DrawComponets(Components.Vertial);
+    DrawComponets(Componets.DebugPhysical);
+
+    requestAnimationFrame(()=>{UpdateCanvas(Components)});
+}
+
+function UpdateCanvasState(Components){
+    window.EditorState.CursorState = "ideal";
+    if(window.Componets != undefined && window.Componets.Physical != undefined){
+        for(const item of window.Componets.Physical){
+            if (typeof item.colide === "function") {
+                item.colide(window.mousePos, 0);//cheack for coligions
+            } /*else {console.warn("Item missing colide():", item);}}*/
+        }
+    }
     if(window.EditorState.CursorState == "hover"){
         canvas.style.cursor = "pointer";
     }else{
         canvas.style.cursor = "crosshair";
     }
-    Grid(30); 
-    updateComponets(Components.Physical);
-    updateComponets(Components.Vertial);
-    
-    DrawComponets(Components.Physical);
-    DrawComponets(Components.Vertial);
-    
-    requestAnimationFrame(()=>{UpdateCanvas(Components)});
-}
 
+}
 
 function updateComponets(Components){
     for(var i = 0;i<Components.length;i++){

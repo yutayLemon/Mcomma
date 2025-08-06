@@ -1,6 +1,6 @@
 
 
-import {Comp,Division,WhileCirc,IfCirc, PreView} from "./Comp.js";
+import {Comp,Division,WhileCirc,IfCirc, PreView,Rect} from "./Comp.js";
 import { canvas,ctx ,UpdateCanvas,initResize} from "./canvas.js";
 import {initControl} from "./Controles.js";
 import {initCanvasHover,initCanvasClick} from "./CanvasClick.js"
@@ -23,6 +23,12 @@ function main(){
     var Componets = {};
     Componets.Physical = [];
     Componets.Vertial = [];
+    Componets.DebugPhysical = [];
+    for(var i = 0;i<120;i++){
+        Componets.DebugPhysical.push(
+            new Rect(Math.random()*canvas.clientWidth,Math.random()*canvas.clientHeight,"red",2)
+        );
+    }
     window.Componets = Componets;//DEBUG
     Componets.Physical.push(
        new Division(100,100,"blue",1,50)
