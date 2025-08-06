@@ -5,6 +5,7 @@ import { canvas,ctx } from "./canvas.js"
 
 class Comp{
     constructor(initX,initY,icolor,lineWidth){
+        this.class;
         this.mode = "ideal";
         this.selected = false;
         this.pos = {x:initX,y:initY};//relative ??
@@ -14,26 +15,54 @@ class Comp{
         this.interactives = [];
         this.children = [];
         this.parent = null;
+        this.layer = 0;
+        this.Reached = false;//stores if accsesed in each frame//optimize
+        this.PostUpdate = false;
+        this.PostDraw = false;
+        this.PostColide = false;
+        this.MouseOver = true;
+        this.drag = false;
     };
+    initReach(){
+        this.initReachSelf();
+        this.initRechChildren();
+    }
+    initReachSelf(){
+        this.Reached = false;
+        this.PostUpdate = false;
+        this.PostDraw = false;
+        this.PostColide = false;
+        this.MouseOver = false;
+    }
+    initRechChildren(){
+        for(const item of this.children){
+            item.initReach();
+        }
+    }
     addChild(child){
         this.children.push(child);
         child.parent = this;
+        child.layer = this.layer+1;
     }
     update(){
         this.updateSelf();
         this.Global = this.globalPos();
+        this.PostUpdate = true;
         this.updateChild();
     }
     updateSelf(){
     }
     updateChild(){
         for(const item of this.children){
-            item.update();
+            if(!item.PostUpdate){
+                item.update();
+            }
         }
     }
 
     draw(){
         this.drawSelf();
+        this.PostDraw = true;
         this.drawChild();
     }
 
@@ -42,9 +71,12 @@ class Comp{
     }
     drawChild(){
         for(const item of this.children){
-            item.draw();
+            if(!item.PostDraw){
+                item.draw();
+            }
         }
     }
+
     globalPos(){
         if(this.parent == null){
             return this.pos;
@@ -64,44 +96,44 @@ class Comp{
         window.EditorState.CursorState = "hover";
     }
 
-    colide(point,r){
-        let ColideRes = this.colideSelf(point,r);
+    colide(point,r,ColideArr){//ColideArr - stores the object wich colided
+        let ColideRes = this.colideSelf(point,r) || {buffer:false,Exact:false};
+        this.PostColide = true;
+        if(ColideRes.buffer){
+            //clides with a buffer zone
+            this.colideChildren(point,r,ColideArr);
+        }
         if(ColideRes.Exact){
             //runn's if colide
+            if(ColideArr != undefined){
+                ColideArr.push(this);
+            }
             this.colideEvent(point,r);
             this.PublicColideEvent(point,r);
         }else{
             this.NotColide(point,r);
         }
-        if(ColideRes.buffer){
-            //clides with a buffer zone
-            this.colideChildren(point,r);
-        }
+        
+        return ColideRes;
     }
     colideSelf(point,r){
-        return 0;
+        return {buffer:false,Exact:false};
     }
-    colideChildren(point,r){
+    colideChildren(point,r,ColideArr){
         for(const item of this.children){
-            item.colide(point,r);
+            if(!item.PostColide){
+                item.colide(point,r,ColideArr);
+            }
         }
     }
 }
 
 
-class Rect extends Comp{
+class debugRect extends Comp{
     constructor(initX,initY,icolor,r){
         super(initX,initY,icolor,1);
+        this.class = "debug";
         this.radi = r;
-    }
-    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
-        return circleOverlap(point,this.Global,r,this.ExpandIntRadi);
-    }
-    colideEvent(){
-        this.color = "green";
-    }
-    updateSelf(){
-
     }
     drawSelf(){
         if(window.EditorState.debug == true){
@@ -119,13 +151,13 @@ class Rect extends Comp{
 class ExtendInter extends Comp{
     constructor(initX,initY,icolor,lineWidth){
         super(initX,initY,icolor,lineWidth);
+        this.class = "extend";
         this.ExpandIntRadi = 10;
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,r,this.ExpandIntRadi);
     }
     colideEvent(){
-        console.log("colide with Extend");
     }
     updateSelf(){
 
@@ -141,16 +173,38 @@ class ExtendInter extends Comp{
 class MoveInter extends Comp{
     constructor(initX,initY){
         super(initX,initY,"black",1);
+        this.class = "mouse";
         this.MoveIntRadi = 10;
     }
+    NotColide(){
+        if(!window.mouseDown){//if out of range only remove drag if mouse up
+            this.drag = false;
+        }
+    }
     colideEvent(){
-        console.log("colide with move");
+        console.log(window.mouseDown);
+        if(window.mouseDown){//if mouse down and overlap start/cont drag
+            this.drag = true;
+        }
+        
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
-        return circleOverlap(point,this.Global,r,this.ExpandIntRadi);
+        return circleOverlap(point,this.Global,r,this.MoveIntRadi);
     }
     updateSelf(){
-
+        if(this.drag){//if it's draging
+           if(window.mouseDown){
+            if(this.parent == null){
+                console.log("oh no");
+            }else if(this.parent.parent == null){
+                this.parent.pos.x = window.mousePos.x;
+                this.parent.pos.y = window.mousePos.y;
+            }else{
+                this.parent.pos.x = window.mousePos.x - this.parent.parent.Global.x;
+                this.parent.pos.y = window.mousePos.y - this.parent.parent.Global.y;
+            }
+        }
+        }
     }
     drawSelf(){
         if(window.EditorState.mode == "edit"){
@@ -163,6 +217,7 @@ class MoveInter extends Comp{
 class Division extends Comp{
     constructor(initX,initY,icolor,lineWidth,initradius){
         super(initX,initY,icolor,lineWidth);
+        this.class = "div";
         this.radius = initradius;
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
@@ -171,7 +226,6 @@ class Division extends Comp{
     NotColide(point,r){
     }
     colideEvent(){
-        console.log("colide with Div");
     }
     updateSelf(){
 
@@ -189,6 +243,7 @@ class WhileCirc extends Comp{
         this.centerFor = {x:icenterForX,y:icenterForY};
         this.radiusDo = initRadiusDo;
         this.radiusFor = initRadiusFor;
+        this.class = "while";
         this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
@@ -208,7 +263,7 @@ class IfCirc extends Comp{
         this.NumSections = initNumSections;
         this.TipHight = iTipH;
         this.CondHight = iCondH;
-
+        this.class = "if";
         this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
@@ -249,4 +304,4 @@ class PreView{
 
 
 
-export {Comp,Division,WhileCirc,IfCirc,PreView,ExtendInter,MoveInter,Rect};
+export {Comp,Division,WhileCirc,IfCirc,PreView,ExtendInter,MoveInter,debugRect};

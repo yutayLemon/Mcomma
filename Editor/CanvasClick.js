@@ -11,20 +11,25 @@ function initCanvasClick(){
             let NewMove = new MoveInter(0,0);
             NewDiv.addChild(NewExtend);
             NewDiv.addChild(NewMove);                              
-            window.Componets.Physical.push(
-                NewDiv
-            );
+            window.Componets.Physical.push(NewDiv);
             window.EditorState.mode = "edit";
             }
             //TODO division detection
-
-
-            
         }
     });
 }
 
+function initCanvasMouseDown(){
+    canvas.addEventListener("mousedown",function(e){
+        window.mouseDown = true;
+    });
+}
 
+function initCanvasMouseUp(){
+    canvas.addEventListener("mouseup",function(e){
+        window.mouseDown = false;
+    });
+}
 
 function initCanvasHover(){
     canvas.addEventListener("mousemove",function(e){
@@ -34,4 +39,4 @@ function initCanvasHover(){
 }
 
 
-export {initCanvasClick,initCanvasHover}
+export {initCanvasClick,initCanvasHover,initCanvasMouseDown,initCanvasMouseUp}

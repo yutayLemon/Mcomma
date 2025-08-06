@@ -1,9 +1,9 @@
 
 
-import {Comp,Division,WhileCirc,IfCirc, PreView,Rect} from "./Comp.js";
+import {Comp,Division,WhileCirc,IfCirc, PreView,debugRect} from "./Comp.js";
 import { canvas,ctx ,UpdateCanvas,initResize} from "./canvas.js";
 import {initControl} from "./Controles.js";
-import {initCanvasHover,initCanvasClick} from "./CanvasClick.js"
+import {initCanvasHover,initCanvasClick,initCanvasMouseDown,initCanvasMouseUp} from "./CanvasClick.js"
 import {InitAssets} from "./draw.js"
 
 
@@ -12,6 +12,8 @@ initResize();
 initControl();
 initCanvasClick();
 initCanvasHover();
+initCanvasMouseDown();
+initCanvasMouseUp();
 
 
 Promise.all([InitAssets()])
@@ -24,11 +26,12 @@ function main(){
     Componets.Physical = [];
     Componets.Vertial = [];
     Componets.DebugPhysical = [];
-    for(var i = 0;i<120;i++){
+    /*for(var i = 0;i<12000;i++){
         Componets.DebugPhysical.push(
-            new Rect(Math.random()*canvas.clientWidth,Math.random()*canvas.clientHeight,"red",2)
+            new debugRect(Math.random()*canvas.clientWidth,Math.random()*canvas.clientHeight,"red",2)
         );
-    }
+    }*/
+
     window.Componets = Componets;//DEBUG
     Componets.Physical.push(
        new Division(100,100,"blue",1,50)

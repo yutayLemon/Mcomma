@@ -21,29 +21,69 @@ function UpdateCanvas(Components){
     window.EditorState.debug = true;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);  
-    UpdateCanvasState(Components);
     Grid(30); 
+
+    initCompReach(Components.Physical);
 
     updateComponets(Components.Physical);
     updateComponets(Components.Vertial);
-    updateComponets(Componets.DebugPhysical);
+    updateDebug(Componets.DebugPhysical);
     
     DrawComponets(Components.Physical);
     DrawComponets(Components.Vertial);
     DrawComponets(Componets.DebugPhysical);
 
+    UpdateMouseInteraction();
+
     requestAnimationFrame(()=>{UpdateCanvas(Components)});
 }
 
-function UpdateCanvasState(Components){
+function updateDebug(Components){
+    for(const point of Components){
+        point.color = "red";
+    }
+    for(const point of Components){
+    for(const item of window.Componets.Physical){
+            if (typeof item.colide === "function") {
+                let findebug = item.colide(point.Global, point.radi);//cheack for coligions
+                if(findebug.buffer){
+                    point.color = "green";
+                }
+                if(findebug.Exact){
+                    point.color = "blue";
+                }
+            } 
+        }
+    }
+}
+
+function initCompReach(Components){
+    for(const point of Components){
+        point.initReach();
+    }
+}
+
+
+function UpdateMouseInteraction(){
     window.EditorState.CursorState = "ideal";
+    let OverlapCompnents = [];
+    let maxItem = {};
+    maxItem.layer = 0;
     if(window.Componets != undefined && window.Componets.Physical != undefined){
         for(const item of window.Componets.Physical){
             if (typeof item.colide === "function") {
-                item.colide(window.mousePos, 0);//cheack for coligions
+                let ColideArr = [];
+                let itemRes = item.colide(window.mousePos, 0,ColideArr);//cheack for coligions
+                for(const obj of  ColideArr){
+                    OverlapCompnents.push(obj);
+                    if(obj.layer >= maxItem.layer){
+                        maxItem = obj;
+                    }
+                }
             } /*else {console.warn("Item missing colide():", item);}}*/
         }
     }
+   // console.log(OverlapCompnents,"maxLayer:",maxItem.class);
     if(window.EditorState.CursorState == "hover"){
         canvas.style.cursor = "pointer";
     }else{

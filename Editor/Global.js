@@ -9,3 +9,5 @@ window.mousePos = {
     x:0,
     y:0
 }
+
+window.mouseDown = false;
