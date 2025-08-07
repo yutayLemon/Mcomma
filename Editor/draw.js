@@ -2,14 +2,12 @@ import { canvas,ctx } from "./canvas.js";
 
 function drawDiv({
     color = "black",
-    ScaledGlobal,
     Global = {x:0,y:0},
-    Scaledradius,
     radius = 10,
     lineWdith=1
 } = {}){
-        const Scpos = ScaledGlobal ?? Global;
-        const Scrad = Scaledradius ?? radius;
+        const Scpos =  Global;
+        const Scrad =  radius;
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.lineWidth = lineWdith;
@@ -30,21 +28,16 @@ function drawInteractDiv(x,y,r){
 function drawWhile({
     color = "black",
     Global = {x:0,y:0},
-    ScaledGlobal,
     radiusDo = 10,
-    ScaledradiusDo,
     radiusFor = 5,
-    ScaledradiusFor,
     lineWdith=1,
     centerDo = {x:-5,y:0},
-    ScaledcenterDo,
-    centerFor = {x:5,y:0},
-    ScaledcenterFor
+    centerFor = {x:5,y:0}
 } = {}){
-        const ScradFor = ScaledradiusFor ?? radiusFor;
-        const ScradDo = ScaledradiusDo ?? radiusDo;
-        const SccenDo = ScaledcenterDo ?? centerDo;
-        const SccenFor = ScaledcenterFor ?? centerFor;
+        const ScradFor =  radiusFor;
+        const ScradDo =  radiusDo;
+        const SccenDo =  centerDo;
+        const SccenFor =  centerFor;
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.lineWidth = lineWdith;
@@ -59,17 +52,14 @@ function drawIf(){
         ctx.beginPath({
             color = "black",
             Global = {x:0,y:0},
-            ScaledGlobal,
             NumSections = 3,
             lineWdith=1,
             TipHight = 5,
-            ScaledTipHight,
-            radius = 10,
-            Scaledradius
+            radius = 10
         } = {});//TODO cheack
-        const pos = ScaledGlobal ?? Global;
-        const rad = Scaledradius ?? radius;
-        const tip = ScaledTipHight ?? TipHight;
+        const pos =  Global;
+        const rad =  radius;
+        const tip =  TipHight;
         ctx.strokeStyle =  color;
         ctx.lineWidth =  lineWdith;
         ctx.arc( pos.x,  pos.y,  rad, 0, 2 * Math.PI);

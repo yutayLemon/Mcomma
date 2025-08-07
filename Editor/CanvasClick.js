@@ -3,8 +3,7 @@ import { Division ,ExtendInter,MoveInter} from "./Comp.js";
 
 function initCanvasClick(){
     canvas.addEventListener("click",function(e){
-        window.mousePos.x = -window.canvasOffset.x + e.x;
-        window.mousePos.y = -window.canvasOffset.y + e.y;
+        UpdateMousePos(e);
         if(window.EditorState.mode == "add"){
             if(window.EditorState.type == "div"){
             let NewDiv = new Division(window.mousePos.x,window.mousePos.y,"black",1,30);
@@ -20,6 +19,14 @@ function initCanvasClick(){
         }
     });
     console.log("init:canvas click event");
+}
+
+function UpdateMousePos(e){
+        window.mousePos.x = -window.canvasOffset.x + e.x;
+        window.mousePos.y = -window.canvasOffset.y + e.y;
+        window.mousePos.x /= window.GlobalScale;
+        window.mousePos.y /= window.GlobalScale;
+
 }
 
 function initCanvasMouseDown(){
@@ -38,8 +45,7 @@ function initCanvasMouseUp(){
 
 function initCanvasHover(){
     canvas.addEventListener("mousemove",function(e){
-        window.mousePos.x = -window.canvasOffset.x + e.x;
-        window.mousePos.y = -window.canvasOffset.y + e.y;
+        UpdateMousePos(e);
     });
     console.log("init:canvas mouse move event");
 }

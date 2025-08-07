@@ -9,10 +9,13 @@ const ctx = canvas.getContext("2d");
 
 
 function UpdateCanvas(Components){
+    ctx.save();
     window.EditorState.debug = true;
 
     ctx.clearRect(-window.canvasOffset.x, -window.canvasOffset.y, canvas.width, canvas.height);  
-    Grid(30*window.GlobalScale); 
+    ctx.scale(window.GlobalScale,window.GlobalScale);
+    
+    Grid(30); 
 
     initCompReach(Components.Physical);
 
@@ -20,14 +23,13 @@ function UpdateCanvas(Components){
     updateComponets(Components.Vertial);
     updateDebug(Componets.DebugPhysical);
 
-    ScaleCanvasComp(Components.Physical);
     
     DrawComponets(Components.Physical);
     DrawComponets(Components.Vertial);
     DrawComponets(Componets.DebugPhysical);
 
     UpdateMouseInteraction();
-
+    ctx.restore();
     requestAnimationFrame(()=>{UpdateCanvas(Components)});
 }
 
@@ -67,12 +69,6 @@ function updateDebug(Components){
 function initCompReach(Components){
     for(const point of Components){
         point.initReach();
-    }
-}
-
-function ScaleCanvasComp(Components){
-    for(const point of Components){
-        point.scale();
     }
 }
 
@@ -135,7 +131,7 @@ function Grid(len){
 
     const pattern = ctx.createPattern(PattCanvas, 'repeat');
     ctx.fillStyle = pattern;
-    ctx.fillRect(-window.canvasOffset.x, -window.canvasOffset.y, canvas.width, canvas.height);
+    ctx.fillRect(-window.canvasOffset.x*window.GlobalScale, -window.canvasOffset.y*window.GlobalScale, canvas.width, canvas.height);
 }
 
 export{canvas,ctx,UpdateCanvas,Grid,initResize};
