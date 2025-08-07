@@ -16,3 +16,5 @@ window.GlobalScale = 1;
 window.SetScale = (n)=>{
     window.GlobalScale = n;
 }
+
+window.canvasOffset = {x:0,y:0};

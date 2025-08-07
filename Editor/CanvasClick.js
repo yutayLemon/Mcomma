@@ -3,9 +3,11 @@ import { Division ,ExtendInter,MoveInter} from "./Comp.js";
 
 function initCanvasClick(){
     canvas.addEventListener("click",function(e){
+        window.mousePos.x = -window.canvasOffset.x + e.x;
+        window.mousePos.y = -window.canvasOffset.y + e.y;
         if(window.EditorState.mode == "add"){
             if(window.EditorState.type == "div"){
-            let NewDiv = new Division(e.x,e.y,"black",1,30);
+            let NewDiv = new Division(window.mousePos.x,window.mousePos.y,"black",1,30);
             let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewDiv.radius,
                                             Math.sin(Math.PI*0.25)*NewDiv.radius);
             let NewMove = new MoveInter(0,0);
@@ -36,8 +38,8 @@ function initCanvasMouseUp(){
 
 function initCanvasHover(){
     canvas.addEventListener("mousemove",function(e){
-        window.mousePos.x = e.x;// / window.GloablScale;
-        window.mousePos.y = e.y;// / window.GloablScale;
+        window.mousePos.x = -window.canvasOffset.x + e.x;
+        window.mousePos.y = -window.canvasOffset.y + e.y;
     });
     console.log("init:canvas mouse move event");
 }

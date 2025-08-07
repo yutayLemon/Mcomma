@@ -11,7 +11,7 @@ const ctx = canvas.getContext("2d");
 function UpdateCanvas(Components){
     window.EditorState.debug = true;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);  
+    ctx.clearRect(-window.canvasOffset.x, -window.canvasOffset.y, canvas.width, canvas.height);  
     Grid(30*window.GlobalScale); 
 
     initCompReach(Components.Physical);
@@ -34,6 +34,9 @@ function UpdateCanvas(Components){
 function CanvasResize(){
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    
+    //ctx.translate(canvas.width/2,canvas.height/2);
+    //window.canvasOffset = {x:canvas.width/2,y:canvas.height/2}
 }
 
 function initResize(){
@@ -132,7 +135,7 @@ function Grid(len){
 
     const pattern = ctx.createPattern(PattCanvas, 'repeat');
     ctx.fillStyle = pattern;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(-window.canvasOffset.x, -window.canvasOffset.y, canvas.width, canvas.height);
 }
 
 export{canvas,ctx,UpdateCanvas,Grid,initResize};
