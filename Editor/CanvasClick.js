@@ -33,8 +33,8 @@ function initCanvasMouseUp(){
 
 function initCanvasHover(){
     canvas.addEventListener("mousemove",function(e){
-        window.mousePos.x = e.x;
-        window.mousePos.y = e.y;
+        window.mousePos.x = e.x / window.GloablScale;
+        window.mousePos.y = e.y / window.GloablScale;
 });
 }
 

@@ -23,8 +23,8 @@ Promise.all([InitAssets()])
 
 function main(){
     var Componets = {};
-    Componets.Physical = [];
-    Componets.Vertial = [];
+    Componets.Physical = [];//colide
+    Componets.Vertial = [];//no colide
     Componets.DebugPhysical = [];
     /*for(var i = 0;i<12000;i++){
         Componets.DebugPhysical.push(

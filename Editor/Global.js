@@ -11,3 +11,5 @@ window.mousePos = {
 }
 
 window.mouseDown = false;
+
+window.GloablScale = 1;

@@ -7,15 +7,6 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d");
 
-function CanvasResize(){
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-}
-
-function initResize(){
-    CanvasResize();
-    window.addEventListener("resize",CanvasResize);
-}
 
 function UpdateCanvas(Components){
     window.EditorState.debug = true;
@@ -36,6 +27,16 @@ function UpdateCanvas(Components){
     UpdateMouseInteraction();
 
     requestAnimationFrame(()=>{UpdateCanvas(Components)});
+}
+
+function CanvasResize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+function initResize(){
+    CanvasResize();
+    window.addEventListener("resize",CanvasResize);
 }
 
 function updateDebug(Components){

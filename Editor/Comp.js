@@ -157,10 +157,30 @@ class ExtendInter extends Comp{
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,r,this.ExpandIntRadi);
     }
+    NotColide(){
+        if(!window.mouseDown){//if out of range only remove drag if mouse up
+            this.drag = false;
+        }
+    }
     colideEvent(){
+        console.log(window.mouseDown);
+        if(window.mouseDown){//if mouse down and overlap start/cont drag
+            this.drag = true;
+        }
+        
     }
     updateSelf(){
-
+        console.log(this.drag);
+        if(this.drag){
+            let difx = window.mousePos.x - this.parent.Global.x;
+            let dify = window.mousePos.y - this.parent.Global.y;
+            let newRadius = Math.sqrt(difx*difx+dify*dify);
+            if(newRadius > 25){
+            this.parent.radius = newRadius;
+            this.pos.x = Math.cos(Math.PI*0.25)*this.parent.radius;
+            this.pos.y = Math.sin(Math.PI*0.25)*this.parent.radius;
+            }
+        }
     }
     drawSelf(){
         if(window.EditorState.mode == "edit"){

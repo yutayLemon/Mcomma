@@ -54,7 +54,7 @@ function drawIf(){
         ctx.strokeStyle =  color;
         ctx.lineWidth =  lineWdith;
         ctx.arc( Global.x,  Global.y,  radiusDo, 0, 2 * Math.PI);
-        ctx.moveTo( Global.x, Global.y+ radius);
+        ctx.moveTo( Global.x, pos.y+ radius);
         let SectRadi = Math.cos(Math.PI/( NumSections*2))* radius;
         for(let i = 0;i< NumSections;i++){
             ctx.moveTo(Math.cos(SectRadi*2*i - SectRadi)* radius,Math.sin(SectRadi*2*i - SectRadi)* radius);
