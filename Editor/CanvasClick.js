@@ -6,6 +6,21 @@ function initCanvasClick(){
         UpdateMousePos(e);
         if(window.EditorState.mode == "add"){
             if(window.EditorState.type == "div"){
+                addNewDiv();
+                window.EditorState.mode = "edit";
+            }else if(window.EditorState.type == "while"){
+
+                window.EditorState.mode = "edit";
+            }else{
+
+            }
+            //TODO division detection
+        }
+    });
+    console.log("init:canvas click event");
+}
+
+function addNewDiv(){
             let NewDiv = new Division(window.mousePos.x,window.mousePos.y,"black",1,30);
             let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewDiv.radius,
                                             Math.sin(Math.PI*0.25)*NewDiv.radius);
@@ -13,12 +28,6 @@ function initCanvasClick(){
             NewDiv.addChild(NewExtend);
             NewDiv.addChild(NewMove);                              
             window.Componets.Physical.push(NewDiv);
-            window.EditorState.mode = "edit";
-            }
-            //TODO division detection
-        }
-    });
-    console.log("init:canvas click event");
 }
 
 function UpdateMousePos(e){
@@ -51,4 +60,15 @@ function initCanvasHover(){
 }
 
 
-export {initCanvasClick,initCanvasHover,initCanvasMouseDown,initCanvasMouseUp}
+function initWheelScroll(){
+    window.addEventListener("wheel",(e)=>{
+        console.log(e.deltaY);
+        if(Math.abs(window.GlobalScale) < 10){
+        window.GlobalScale += (e.deltaY/1000)*window.GlobalScale;
+        window.SetScale(window.GlobalScale);
+        }
+    });
+    console.log("init:scroll wheel");
+}
+
+export {initCanvasClick,initCanvasHover,initCanvasMouseDown,initCanvasMouseUp,initWheelScroll}

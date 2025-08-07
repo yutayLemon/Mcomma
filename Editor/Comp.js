@@ -22,6 +22,7 @@ class Comp{
         this.PostColide = false;
         this.MouseOver = true;
         this.drag = false;
+        this.CodeComp = false;
         
     };
     initReach(){
@@ -239,6 +240,7 @@ class Division extends Comp{
         super(initX,initY,icolor,lineWidth);
         this.class = "div";
         this.radius = initradius;
+        this.CodeComp = true;
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,this.radius,r);
@@ -264,6 +266,7 @@ class WhileCirc extends Comp{
         this.radiusDo = initRadiusDo;
         this.radiusFor = initRadiusFor;
         this.class = "while";
+        this.CodeComp = true;
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.centerDo,this.radiusDo,r) || circleOverlap(point,this.centerFor,this.radiusFor,r);
@@ -283,6 +286,7 @@ class IfCirc extends Comp{
         this.TipHight = iTipH;
         this.CondHight = iCondH;
         this.class = "if";
+        this.CodeComp = true;
         
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
