@@ -20,8 +20,11 @@ class Comp{
         this.PostUpdate = false;
         this.PostDraw = false;
         this.PostColide = false;
+        this.PostScale = false;
         this.MouseOver = true;
         this.drag = false;
+        
+        this.ScaleDependants = ["Global"];
     };
     initReach(){
         this.initReachSelf();
@@ -33,6 +36,7 @@ class Comp{
         this.PostDraw = false;
         this.PostColide = false;
         this.MouseOver = false;
+        this.PostScale = false;
     }
     initRechChildren(){
         for(const item of this.children){
@@ -77,14 +81,47 @@ class Comp{
         }
     }
 
+    scale(){
+        this.scaleSelf();
+        this.PostScale = true;
+        this.scaleChild();
+    }
+
+    scaleSelf(){
+        for(const item of this.ScaleDependants){
+            if(this[item]  == undefined){
+                console.warn("Non existing value qued for scaling:" + item);
+            }else if(typeof this[item]  == "object"){
+                for(const [key, val] of Object.entries(this[item])){
+                    if(this["Scaled"+item] == undefined){
+                        this["Scaled"+item] = {};
+                    }
+                    this["Scaled"+item][key] = this[item][key]*window.GlobalScale;
+                }
+            }else if(typeof this[item]  == "number"){
+                this["Scaled"+item] = this[item]*window.GlobalScale;
+            }else{
+                console.warn("Non supported value qued for scaling:" + item);
+            }
+            
+        }
+    }
+    scaleChild(){
+        for(const item of this.children){
+            if(!item.PostScale){
+                item.scale();
+            }
+        }
+    }
+
     globalPos(){
         if(this.parent == null){
             return this.pos;
         }else{
             let ParentPos = this.parent.globalPos();
             return {
-                x:ParentPos.x+this.pos.x,
-                y:ParentPos.y+this.pos.y
+                x:(ParentPos.x+this.pos.x)*window.GlobalScale,
+                y:(ParentPos.y+this.pos.y)*window.GlobalScale
             }
         }
     }
@@ -163,14 +200,12 @@ class ExtendInter extends Comp{
         }
     }
     colideEvent(){
-        console.log(window.mouseDown);
         if(window.mouseDown){//if mouse down and overlap start/cont drag
             this.drag = true;
         }
         
     }
     updateSelf(){
-        console.log(this.drag);
         if(this.drag){
             let difx = window.mousePos.x - this.parent.Global.x;
             let dify = window.mousePos.y - this.parent.Global.y;
@@ -202,7 +237,6 @@ class MoveInter extends Comp{
         }
     }
     colideEvent(){
-        console.log(window.mouseDown);
         if(window.mouseDown){//if mouse down and overlap start/cont drag
             this.drag = true;
         }
@@ -215,7 +249,7 @@ class MoveInter extends Comp{
         if(this.drag){//if it's draging
            if(window.mouseDown){
             if(this.parent == null){
-                console.log("oh no");
+                console.warn("oh no");
             }else if(this.parent.parent == null){
                 this.parent.pos.x = window.mousePos.x;
                 this.parent.pos.y = window.mousePos.y;
@@ -239,6 +273,7 @@ class Division extends Comp{
         super(initX,initY,icolor,lineWidth);
         this.class = "div";
         this.radius = initradius;
+        this.ScaleDependants.push("radius");
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,this.radius,r);
@@ -264,7 +299,7 @@ class WhileCirc extends Comp{
         this.radiusDo = initRadiusDo;
         this.radiusFor = initRadiusFor;
         this.class = "while";
-        this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
+        this.ScaleDependants.push("centerDo","centerFor","radiusDo","radiusFor");
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.centerDo,this.radiusDo,r) || circleOverlap(point,this.centerFor,this.radiusFor,r);
@@ -284,7 +319,8 @@ class IfCirc extends Comp{
         this.TipHight = iTipH;
         this.CondHight = iCondH;
         this.class = "if";
-        this.Drag = {x:initX+initradius,y:initY+initradius};//point of draging
+        this.ScaleDependants.push("CondHight","TipHight");
+        
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,this.radius,r);//ADD detection for traiangles

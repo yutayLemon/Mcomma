@@ -12,4 +12,7 @@ window.mousePos = {
 
 window.mouseDown = false;
 
-window.GloablScale = 1;
+window.GlobalScale = 1;
+window.SetScale = (n)=>{
+    window.GlobalScale = n;
+}

@@ -45,6 +45,5 @@ function main(){
     Componets.Vertial.push(new PreView("red"));
 
 
-
     UpdateCanvas(Componets);
 }

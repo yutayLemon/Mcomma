@@ -12,13 +12,15 @@ function UpdateCanvas(Components){
     window.EditorState.debug = true;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);  
-    Grid(30); 
+    Grid(30*window.GlobalScale); 
 
     initCompReach(Components.Physical);
 
     updateComponets(Components.Physical);
     updateComponets(Components.Vertial);
     updateDebug(Componets.DebugPhysical);
+
+    ScaleCanvasComp(Components.Physical);
     
     DrawComponets(Components.Physical);
     DrawComponets(Components.Vertial);
@@ -37,6 +39,7 @@ function CanvasResize(){
 function initResize(){
     CanvasResize();
     window.addEventListener("resize",CanvasResize);
+    console.log("init:auto resize");
 }
 
 function updateDebug(Components){
@@ -63,6 +66,13 @@ function initCompReach(Components){
         point.initReach();
     }
 }
+
+function ScaleCanvasComp(Components){
+    for(const point of Components){
+        point.scale();
+    }
+}
+
 
 
 function UpdateMouseInteraction(){

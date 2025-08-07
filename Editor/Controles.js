@@ -8,6 +8,7 @@ function initControl(){
             console.log("selected:"+this.id);
         });
     }
+    console.log("init:click lsitener for compnent selection");
 }
 
 

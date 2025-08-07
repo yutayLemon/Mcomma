@@ -17,25 +17,29 @@ function initCanvasClick(){
             //TODO division detection
         }
     });
+    console.log("init:canvas click event");
 }
 
 function initCanvasMouseDown(){
     canvas.addEventListener("mousedown",function(e){
         window.mouseDown = true;
     });
+    console.log("init:canvas mouse down event");
 }
 
 function initCanvasMouseUp(){
     canvas.addEventListener("mouseup",function(e){
         window.mouseDown = false;
     });
+    console.log("init:canvas mouse up event");
 }
 
 function initCanvasHover(){
     canvas.addEventListener("mousemove",function(e){
-        window.mousePos.x = e.x / window.GloablScale;
-        window.mousePos.y = e.y / window.GloablScale;
-});
+        window.mousePos.x = e.x;// / window.GloablScale;
+        window.mousePos.y = e.y;// / window.GloablScale;
+    });
+    console.log("init:canvas mouse move event");
 }
 
 
