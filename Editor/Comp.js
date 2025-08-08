@@ -258,6 +258,9 @@ class Division extends Comp{
 }
 
 
+function addVect(v1,v2){
+    return {x:v1.x+v2.x,y:v1.y+v2.y};
+}
 class WhileCirc extends Comp{
     constructor(initX,initY,icolor,lineWidth,initRadiusDo,initRadiusFor,icenterDoX,icenterDoY,icenterForX,icenterForY){
         super(initX,initY,icolor,lineWidth);
@@ -269,7 +272,9 @@ class WhileCirc extends Comp{
         this.CodeComp = true;
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
-        return circleOverlap(point,this.centerDo,this.radiusDo,r) || circleOverlap(point,this.centerFor,this.radiusFor,r);
+        let BoolDo = circleOverlap(point,addVect(this.centerDo,this.Global),this.radiusDo,r);
+        let BoolFor = circleOverlap(point,addVect(this.centerFor,this.Global),this.radiusFor,r);
+        return {Exact:BoolDo.Exact||BoolFor.Exact,buffer:BoolDo.buffer||BoolFor.buffer};
     }
     updateSelf(){
         

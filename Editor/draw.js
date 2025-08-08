@@ -41,8 +41,8 @@ function drawWhile({
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.lineWidth = lineWdith;
-        ctx.arc(SccenDo.x, SccenDo.y, ScradDo, 0, 2 * Math.PI);
-        ctx.arc(SccenFor.x, SccenFor.y, ScradFor, 0, 2 * Math.PI);
+        ctx.arc(SccenDo.x + Global.x, SccenDo.y+ Global.y, ScradDo, 0, 2 * Math.PI);
+        ctx.arc(SccenFor.x+ Global.x, SccenFor.y+ Global.y, ScradFor, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.strokeStyle = "black";
         ctx.lineWidth = 1;

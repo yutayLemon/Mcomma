@@ -41,8 +41,6 @@ function CanvasResize(){
     
     ctx.translate(canvas.width/2,canvas.height/2);
     window.canvasOffset = {x:canvas.width/2,y:canvas.height/2}
-    //ctx.translate(canvas.width/2,canvas.height/2);
-    //window.canvasOffset = {x:canvas.width/2,y:canvas.height/2}
 }
 
 function initResize(){
@@ -96,10 +94,9 @@ function UpdateMouseInteraction(){
                         maxItem = obj;
                     }
                 }
-            } /*else {console.warn("Item missing colide():", item);}}*/
+            } 
         }
     }
-   // console.log(OverlapCompnents,"maxLayer:",maxItem.class);
     if(window.EditorState.CursorState == "hover"){
         canvas.style.cursor = "pointer";
     }else{
@@ -137,7 +134,6 @@ function Grid(len){
 
     const pattern = ctx.createPattern(PattCanvas, 'repeat');
     ctx.fillStyle = pattern;
-    console.log(canvas.width,canvas.height);
     let inverseScale = 1/window.GlobalScale;
     ctx.fillRect(-canvas.width*inverseScale*(1/2), -canvas.height*inverseScale*(1/2),
                   canvas.width*inverseScale, canvas.height*inverseScale);

@@ -1,5 +1,5 @@
 import {canvas,ctx} from "./canvas.js";
-import { Division ,ExtendInter,MoveInter} from "./Comp.js";
+import { Division ,ExtendInter,MoveInter, WhileCirc} from "./Comp.js";
 
 function initCanvasClick(){
     canvas.addEventListener("click",function(e){
@@ -8,8 +8,8 @@ function initCanvasClick(){
             if(window.EditorState.type == "div"){
                 addNewDiv();
                 window.EditorState.mode = "edit";
-            }else if(window.EditorState.type == "while"){
-
+            }else if(window.EditorState.type == "whileComp"){
+                addWhile();
                 window.EditorState.mode = "edit";
             }else{
 
@@ -28,6 +28,21 @@ function addNewDiv(){
             NewDiv.addChild(NewExtend);
             NewDiv.addChild(NewMove);                              
             window.Componets.Physical.push(NewDiv);
+}
+
+function addWhile(){
+            let newWhile = new WhileCirc(window.mousePos.x,window.mousePos.y,"blue",1,30,20,
+                -30,0,
+                30,0
+            );
+            let NewMove = new MoveInter(0,0);
+            let NewExtendDo = new ExtendInter(-60,0);
+            let NewExtendFor = new ExtendInter(60,0);
+            newWhile.addChild(NewExtendDo);
+            newWhile.addChild(NewExtendFor);
+            newWhile.addChild(NewMove);
+
+            window.Componets.Physical.push(newWhile);
 }
 
 function UpdateMousePos(e){
