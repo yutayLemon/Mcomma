@@ -39,6 +39,8 @@ function CanvasResize(){
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     
+    ctx.translate(canvas.width/2,canvas.height/2);
+    window.canvasOffset = {x:canvas.width/2,y:canvas.height/2}
     //ctx.translate(canvas.width/2,canvas.height/2);
     //window.canvasOffset = {x:canvas.width/2,y:canvas.height/2}
 }
@@ -80,6 +82,8 @@ function UpdateMouseInteraction(){
     window.EditorState.CursorState = "ideal";
     let OverlapCompnents = [];
     let maxItem = {};
+    let maxCodeItem = {};
+    maxCodeItem.layer = 0;
     maxItem.layer = 0;
     if(window.Componets != undefined && window.Componets.Physical != undefined){
         for(const item of window.Componets.Physical){
@@ -133,8 +137,10 @@ function Grid(len){
 
     const pattern = ctx.createPattern(PattCanvas, 'repeat');
     ctx.fillStyle = pattern;
+    console.log(canvas.width,canvas.height);
     let inverseScale = 1/window.GlobalScale;
-    ctx.fillRect(-canvas.width*inverseScale*(1/2), -canvas.height*inverseScale*(1/2), canvas.width*inverseScale, canvas.height*inverseScale);
+    ctx.fillRect(-canvas.width*inverseScale*(1/2), -canvas.height*inverseScale*(1/2),
+                  canvas.width*inverseScale, canvas.height*inverseScale);
 }
 
 export{canvas,ctx,UpdateCanvas,Grid,initResize};

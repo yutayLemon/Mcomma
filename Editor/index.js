@@ -22,8 +22,6 @@ Promise.all([InitAssets()])
 })
 
 function main(){
-    ctx.translate(canvas.width/2,canvas.height/2);
-    window.canvasOffset = {x:canvas.width/2,y:canvas.height/2}
     var Componets = {};
     Componets.Physical = [];//colide
     Componets.Vertial = [];//no colide
