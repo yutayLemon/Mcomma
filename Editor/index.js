@@ -1,6 +1,6 @@
 
 
-import {Comp,Division,WhileCirc,IfCirc, PreView,debugRect} from "./Comp.js";
+import {Comp,Division,WhileCirc,IfCirc, PreView,debugRect,container} from "./Comp.js";
 import { canvas,ctx ,UpdateCanvas,initResize} from "./canvas.js";
 import {initControl} from "./Controles.js";
 import {initCanvasHover,initCanvasClick,initCanvasMouseDown,initCanvasMouseUp,initWheelScroll} from "./CanvasClick.js"
@@ -23,6 +23,10 @@ Promise.all([InitAssets()])
 
 function main(){
     var Componets = {};
+    var MainScope = {};
+    MainScope.Physical = new container(0,0);
+    MainScope.Vertial = new container(0,0);
+    MainScope.DebugPhysical = new container(0,0);
     Componets.Physical = [];//colide
     Componets.Vertial = [];//no colide
     Componets.DebugPhysical = [];
@@ -41,8 +45,17 @@ function main(){
         this.pos.x += 1.5;
         this.pos.y += 1;
     }
+    MainScope.Physical.addChild(
+       new Division(100,100,"blue",1,50)
+    );
+    MainScope.Physical.children[0].updateSelf = function(){
+       // console.log("blue updating!!");
+        this.pos.x += 1.5;
+        this.pos.y += 1;
+    }
 
     Componets.Vertial.push(new PreView("red"));
+    MainScope.Vertial.addChild(new PreView("red"));
 
 
     UpdateCanvas(Componets);

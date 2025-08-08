@@ -90,7 +90,7 @@ function LoadMoveToggle(link){
         resolve({img:LoadImg,ctx:LoadCtx,canvas:LoadCanvas});
     };
     LoadImg.onerror = (err)=>{reject(err)};
-    LoadImg.src = link;//"./SVG/move.svg"; // from https://www.svgrepo.com/svg/533693/move-alt
+    LoadImg.src = link;
 })
 }
 

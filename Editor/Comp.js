@@ -23,6 +23,7 @@ class Comp{
         this.MouseOver = true;
         this.drag = false;
         this.CodeComp = false;
+        this.vertial = false;
         
     };
     initReach(){
@@ -149,6 +150,17 @@ class debugRect extends Comp{
             ctx.strokeStyle = "black";
             ctx.lineWidth = 1;
         }
+    }
+}
+
+class container extends Comp{//These are vertial
+    constructor(initX,initY){
+        super(initX,initY,"white",0);
+        this.vertial = true;
+        this.class = "container";
+    }
+    drawSelf(){
+        //no render
     }
 }
 
@@ -332,4 +344,4 @@ class PreView{
 
 
 
-export {Comp,Division,WhileCirc,IfCirc,PreView,ExtendInter,MoveInter,debugRect};
+export {Comp,Division,WhileCirc,IfCirc,PreView,ExtendInter,MoveInter,debugRect,container};

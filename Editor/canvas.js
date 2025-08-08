@@ -18,7 +18,6 @@ function UpdateCanvas(Components){
     
     Grid(30); 
     
-
     initCompReach(Components.Physical);
 
     updateComponets(Components.Physical);
@@ -85,7 +84,7 @@ function UpdateMouseInteraction(){
     maxItem.layer = 0;
     if(window.Componets != undefined && window.Componets.Physical != undefined){
         for(const item of window.Componets.Physical){
-            if (typeof item.colide === "function") {
+            if (typeof item.colide === "function" && !item.vertial) {
                 let ColideArr = [];
                 let itemRes = item.colide(window.mousePos, 0,ColideArr);//cheack for coligions
                 for(const obj of  ColideArr){
@@ -93,10 +92,15 @@ function UpdateMouseInteraction(){
                     if(obj.layer >= maxItem.layer){
                         maxItem = obj;
                     }
+                    if(obj.layer >= maxCodeItem.layer && obj.CodeComp){
+                        maxCodeItem = obj;
+                    }
                 }
             } 
         }
     }
+    window.TopItems.maxCodeItem = maxCodeItem;
+    window.TopItems.maxItem = maxItem;
     if(window.EditorState.CursorState == "hover"){
         canvas.style.cursor = "pointer";
     }else{
@@ -126,9 +130,9 @@ function Grid(len){
 
     pctx.beginPath();
     pctx.moveTo(0, 0);
-    pctx.lineTo(0, 50);
-    pctx.lineTo(50, 50);
-    pctx.lineTo(50, 0);
+    pctx.lineTo(0, len);
+    pctx.lineTo(len, len);
+    pctx.lineTo(len, 0);
     pctx.lineTo(0, 0);
     pctx.stroke();
 
@@ -139,4 +143,4 @@ function Grid(len){
                   canvas.width*inverseScale, canvas.height*inverseScale);
 }
 
-export{canvas,ctx,UpdateCanvas,Grid,initResize};
+export{canvas,ctx,UpdateCanvas,Grid,initResize,UpdateMouseInteraction};

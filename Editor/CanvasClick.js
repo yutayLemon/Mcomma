@@ -1,7 +1,8 @@
-import {canvas,ctx} from "./canvas.js";
+import {canvas,ctx,UpdateMouseInteraction} from "./canvas.js";
 import { Division ,ExtendInter,MoveInter, WhileCirc} from "./Comp.js";
 
 function initCanvasClick(){
+    UpdateMouseInteraction();
     canvas.addEventListener("click",function(e){
         UpdateMousePos(e);
         if(window.EditorState.mode == "add"){
@@ -21,13 +22,20 @@ function initCanvasClick(){
 }
 
 function addNewDiv(){
+            let parent = window.TopItems.maxCodeItem;
             let NewDiv = new Division(window.mousePos.x,window.mousePos.y,"black",1,30);
             let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewDiv.radius,
                                             Math.sin(Math.PI*0.25)*NewDiv.radius);
             let NewMove = new MoveInter(0,0);
             NewDiv.addChild(NewExtend);
-            NewDiv.addChild(NewMove);                              
-            window.Componets.Physical.push(NewDiv);
+            NewDiv.addChild(NewMove); 
+            console.log(parent);   
+            if(parent.mode){
+                parent.addChild(NewDiv);
+            }else{
+                window.Componets.Physical.push(NewDiv);                     
+            }
+            
 }
 
 function addWhile(){
@@ -77,7 +85,6 @@ function initCanvasHover(){
 
 function initWheelScroll(){
     window.addEventListener("wheel",(e)=>{
-        console.log(e.deltaY);
         if(Math.abs(window.GlobalScale) < 10){
         window.GlobalScale += (e.deltaY/1000)*window.GlobalScale;
         window.SetScale(window.GlobalScale);
