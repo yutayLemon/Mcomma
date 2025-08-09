@@ -8,7 +8,7 @@ canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d");
 
 
-function UpdateCanvas(Components){
+function UpdateCanvas(){
     ctx.save();
     window.EditorState.debug = true;
  
@@ -18,20 +18,19 @@ function UpdateCanvas(Components){
     
     Grid(30); 
     
-    initCompReach(Components.Physical);
+    window.Componets.Physical.initReach();
 
-    updateComponets(Components.Physical);
-    updateComponets(Components.Vertial);
-    updateDebug(Componets.DebugPhysical);
+    window.Componets.Physical.update();
+    window.Componets.Vertial.update();
+    //updateDebug(Componets.DebugPhysical);
 
-    
-    DrawComponets(Components.Physical);
-    DrawComponets(Components.Vertial);
-    DrawComponets(Componets.DebugPhysical);
+    window.Componets.Physical.draw();
+    window.Componets.Vertial.draw();
+    window.Componets.DebugPhysical.draw();
 
     UpdateMouseInteraction();
     ctx.restore();
-    requestAnimationFrame(()=>{UpdateCanvas(Components)});
+    requestAnimationFrame(()=>{UpdateCanvas()});
 }
 
 function CanvasResize(){
@@ -49,29 +48,22 @@ function initResize(){
 }
 
 function updateDebug(Components){
-    for(const point of Components){
+    for(const point of Components.children){
         point.color = "red";
     }
-    for(const point of Components){
-    for(const item of window.Componets.Physical){
+    for(const item of window.Componets.Physical){//FIX
             if (typeof item.colide === "function") {
-                let findebug = item.colide(point.Global, point.radi);//cheack for coligions
+                let findebug = item.colide(Components.Global, Components.radi);//cheack for coligions
                 if(findebug.buffer){
-                    point.color = "green";
+                    Components.color = "green";
                 }
                 if(findebug.Exact){
-                    point.color = "blue";
+                    Components.color = "blue";
                 }
             } 
         }
-    }
 }
 
-function initCompReach(Components){
-    for(const point of Components){
-        point.initReach();
-    }
-}
 
 
 
@@ -83,10 +75,10 @@ function UpdateMouseInteraction(){
     maxCodeItem.layer = 0;
     maxItem.layer = 0;
     if(window.Componets != undefined && window.Componets.Physical != undefined){
-        for(const item of window.Componets.Physical){
-            if (typeof item.colide === "function" && !item.vertial) {
+            if (typeof window.Componets.Physical.colide === "function") {
                 let ColideArr = [];
-                let itemRes = item.colide(window.mousePos, 0,ColideArr);//cheack for coligions
+                let itemRes = window.Componets.Physical.colide(window.mousePos, 0,ColideArr);//cheack for coligions
+                
                 for(const obj of  ColideArr){
                     OverlapCompnents.push(obj);
                     if(obj.layer >= maxItem.layer){
@@ -97,7 +89,6 @@ function UpdateMouseInteraction(){
                     }
                 }
             } 
-        }
     }
     window.TopItems.maxCodeItem = maxCodeItem;
     window.TopItems.maxItem = maxItem;
@@ -109,17 +100,8 @@ function UpdateMouseInteraction(){
 
 }
 
-function updateComponets(Components){
-    for(var i = 0;i<Components.length;i++){
-        Components[i].update();
-    }
-}
 
-function DrawComponets(Components){
-    for(var i = 0;i<Components.length;i++){
-        Components[i].draw();
-    }
-}
+
 
 function Grid(len){
     PattCanvas.width = len;

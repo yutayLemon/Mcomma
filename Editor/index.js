@@ -27,24 +27,7 @@ function main(){
     MainScope.Physical = new container(0,0);
     MainScope.Vertial = new container(0,0);
     MainScope.DebugPhysical = new container(0,0);
-    Componets.Physical = [];//colide
-    Componets.Vertial = [];//no colide
-    Componets.DebugPhysical = [];
-    /*for(var i = 0;i<12000;i++){
-        Componets.DebugPhysical.push(
-            new debugRect(Math.random()*canvas.clientWidth,Math.random()*canvas.clientHeight,"red",2)
-        );
-    }*/
-
-    window.Componets = Componets;//DEBUG
-    Componets.Physical.push(
-       new Division(100,100,"blue",1,50)
-    );
-    Componets.Physical[0].updateSelf = function(){
-       // console.log("blue updating!!");
-        this.pos.x += 1.5;
-        this.pos.y += 1;
-    }
+    window.Componets = MainScope;//DEBUG
     MainScope.Physical.addChild(
        new Division(100,100,"blue",1,50)
     );
@@ -54,7 +37,6 @@ function main(){
         this.pos.y += 1;
     }
 
-    Componets.Vertial.push(new PreView("red"));
     MainScope.Vertial.addChild(new PreView("red"));
 
 

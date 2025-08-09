@@ -23,7 +23,10 @@ function initCanvasClick(){
 
 function addNewDiv(){
             let parent = window.TopItems.maxCodeItem;
-            let NewDiv = new Division(window.mousePos.x,window.mousePos.y,"black",1,30);
+            if(!parent.Global){
+                parent.Global = {x:0,y:0};
+            }
+            let NewDiv = new Division(window.mousePos.x-parent.Global.x,window.mousePos.y-parent.Global.y,"black",1,30);
             let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewDiv.radius,
                                             Math.sin(Math.PI*0.25)*NewDiv.radius);
             let NewMove = new MoveInter(0,0);
@@ -33,7 +36,7 @@ function addNewDiv(){
             if(parent.mode){
                 parent.addChild(NewDiv);
             }else{
-                window.Componets.Physical.push(NewDiv);                     
+                window.Componets.Physical.addChild(NewDiv);                     
             }
             
 }
@@ -41,7 +44,7 @@ function addNewDiv(){
 function addWhile(){
             let newWhile = new WhileCirc(window.mousePos.x,window.mousePos.y,"blue",1,30,20,
                 -30,0,
-                30,0
+                 30,0
             );
             let NewMove = new MoveInter(0,0);
             let NewExtendDo = new ExtendInter(-60,0);
@@ -50,7 +53,7 @@ function addWhile(){
             newWhile.addChild(NewExtendFor);
             newWhile.addChild(NewMove);
 
-            window.Componets.Physical.push(newWhile);
+            window.Componets.Physical.addChild(newWhile);
 }
 
 function UpdateMousePos(e){

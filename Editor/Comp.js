@@ -79,8 +79,9 @@ class Comp{
             }
         }
     }
-
-    
+    toText(){
+        return "";
+    }
     
     globalPos(){
         if(this.parent == null){
@@ -140,6 +141,8 @@ class debugRect extends Comp{
         this.class = "debug";
         this.radi = r;
     }
+
+
     drawSelf(){
         if(window.EditorState.debug == true){
             ctx.beginPath();
@@ -158,6 +161,9 @@ class container extends Comp{//These are vertial
         super(initX,initY,"white",0);
         this.vertial = true;
         this.class = "container";
+    }
+    colideSelf(){
+        return {buffer:true,Exact:false}
     }
     drawSelf(){
         //no render
@@ -254,6 +260,43 @@ class Division extends Comp{
         this.radius = initradius;
         this.CodeComp = true;
     }
+     toText(){
+        let strFin = "";
+        for(const item of this.children){
+            strFin += item.toText();
+        }   
+        return strFin;
+    }
+    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
+        return circleOverlap(point,this.Global,this.radius,r);
+    }
+    NotColide(point,r){
+    }
+    colideEvent(){
+    }
+    updateSelf(){
+
+    }
+    drawSelf(){
+        drawDiv(this);
+    }
+}
+
+class CurlyKets extends Comp{
+    constructor(initX,initY,icolor,lineWidth,initradius){
+        super(initX,initY,icolor,lineWidth);
+        this.class = "curlyket";
+        this.radius = initradius;
+        this.CodeComp = true;
+    }
+     toText(){
+        let strFin = "{";
+        for(const item of this.children){
+            strFin += item.toText();
+        }   
+        strFin += "}";
+        return strFin;
+    }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,this.radius,r);
     }
@@ -273,6 +316,7 @@ class Division extends Comp{
 function addVect(v1,v2){
     return {x:v1.x+v2.x,y:v1.y+v2.y};
 }
+
 class WhileCirc extends Comp{
     constructor(initX,initY,icolor,lineWidth,initRadiusDo,initRadiusFor,icenterDoX,icenterDoY,icenterForX,icenterForY){
         super(initX,initY,icolor,lineWidth);

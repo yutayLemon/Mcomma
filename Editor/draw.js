@@ -17,6 +17,23 @@ function drawDiv({
         ctx.lineWidth = 1;
 }
 
+function drawDiv({
+    color = "black",
+    Global = {x:0,y:0},
+    radius = 10,
+    lineWdith=1
+} = {}){
+        const Scpos =  Global;
+        const Scrad =  radius;
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineWdith;
+        ctx.arc(Scpos.x, Scpos.y,Scrad, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 1;
+}
+
 function drawInteractDiv(x,y,r){
     let MoveIntDim = 20;
     let ExpandIntDim = 20;
