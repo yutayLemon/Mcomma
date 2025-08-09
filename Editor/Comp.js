@@ -1,4 +1,4 @@
-import {drawDiv,drawInteractDiv,drawWhile,drawIf} from "./draw.js"
+import {drawDiv,drawCurl} from "./draw.js"
 import {circleOverlap} from "./overlap.js"
 import { canvas,ctx } from "./canvas.js"
 
@@ -308,84 +308,10 @@ class CurlyKets extends Comp{
 
     }
     drawSelf(){
-        drawDiv(this);
+        drawCurl(this);
     }
 }
-
-
-function addVect(v1,v2){
-    return {x:v1.x+v2.x,y:v1.y+v2.y};
-}
-
-class WhileCirc extends Comp{
-    constructor(initX,initY,icolor,lineWidth,initRadiusDo,initRadiusFor,icenterDoX,icenterDoY,icenterForX,icenterForY){
-        super(initX,initY,icolor,lineWidth);
-        this.centerDo = {x:icenterDoX,y:icenterDoY};
-        this.centerFor = {x:icenterForX,y:icenterForY};
-        this.radiusDo = initRadiusDo;
-        this.radiusFor = initRadiusFor;
-        this.class = "while";
-        this.CodeComp = true;
-    }
-    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
-        let BoolDo = circleOverlap(point,addVect(this.centerDo,this.Global),this.radiusDo,r);
-        let BoolFor = circleOverlap(point,addVect(this.centerFor,this.Global),this.radiusFor,r);
-        return {Exact:BoolDo.Exact||BoolFor.Exact,buffer:BoolDo.buffer||BoolFor.buffer};
-    }
-    updateSelf(){
-        
-    }
-    drawSelf(){
-        drawWhile(this);
-    }
-}
-
-class IfCirc extends Comp{
-    constructor(initX,initY,icolor,lineWidth,initNumSections,iTipH,iCondH){
-        super(initX,initY,icolor,lineWidth);
-        this.NumSections = initNumSections;
-        this.TipHight = iTipH;
-        this.CondHight = iCondH;
-        this.class = "if";
-        this.CodeComp = true;
-        
-    }
-    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
-        return circleOverlap(point,this.Global,this.radius,r);//ADD detection for traiangles
-    }
-    updateSelf(){
- 
-    }
-    drawSelf(){
-        drawIf(this);
-    }
-}
-
-class PreView{
-    constructor(color){
-        console.log("Mouse Previews constructed");
-        this.pos = {};
-        this.color = color;
-    }
-    update(){
-        this.pos.x = window.mousePos.x;
-        this.pos.y = window.mousePos.y;
-    }
-
-    draw(){
-        if(window.EditorState.mode == "add"){
-        if(window.EditorState.type == "div"){
-            drawDiv(this);
-        }else if(window.EditorState.type == "whileComp"){
-            drawWhile(this);
-        }else if(window.EditorState.type == "ifComp"){
-            drawIf(this);
-        }
-    }
-    }
-
-}
-
+//add if groups
 
 
 export {Comp,Division,WhileCirc,IfCirc,PreView,ExtendInter,MoveInter,debugRect,container};

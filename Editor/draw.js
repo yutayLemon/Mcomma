@@ -17,21 +17,68 @@ function drawDiv({
         ctx.lineWidth = 1;
 }
 
-function drawDiv({
+function drawCurl({
     color = "black",
     Global = {x:0,y:0},
     radius = 10,
     lineWdith=1
 } = {}){
-        const Scpos =  Global;
-        const Scrad =  radius;
-        ctx.beginPath();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = lineWdith;
-        ctx.arc(Scpos.x, Scpos.y,Scrad, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 1;
+    const Scpos = Global;
+    const Scrad = radius;
+    const CurlWidth = Scrad * 0.3;
+    const PeakCount = 7;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWdith;
+
+    let SubTheta = Math.PI / PeakCount;
+    let i = 0;
+    let CurrentPos = {
+      x: Scpos.x + Scrad * Math.cos(SubTheta * (i * 2)),
+      y: Scpos.y + Scrad * Math.sin(SubTheta * (i * 2)),
+    }; //right up first peak
+    ctx.moveTo(CurrentPos.x, CurrentPos.y);
+    for (let i = 0; i < PeakCount; i++) {
+    let NewMidPos = {
+      x: Scpos.x + Scrad * Math.cos(SubTheta * (i * 2 + 1)),
+      y: Scpos.y + Scrad * Math.sin(SubTheta * (i * 2 + 1)),
+    };
+    let NewEndPos = {
+      x: Scpos.x + Scrad * Math.cos(SubTheta * (i * 2 + 2)),
+      y: Scpos.y + Scrad * Math.sin(SubTheta * (i * 2 + 2)),
+    };
+    let MidCtr1 = {
+      x: Scpos.x + (CurlWidth + Scrad) * Math.cos(SubTheta * (i * 2)),
+      y: Scpos.y + (CurlWidth + Scrad) * Math.sin(SubTheta * (i * 2)),
+    };
+    let MidCtr2 = {
+      x: Scpos.x + (Scrad - CurlWidth) * Math.cos(SubTheta * (i * 2 + 1)),
+      y: Scpos.y + (Scrad - CurlWidth) * Math.sin(SubTheta * (i * 2 + 1)),
+    }; //same as end ctr1
+    let EndCtr2 = {
+      x: Scpos.x + (CurlWidth + Scrad) * Math.cos(SubTheta * (i * 2 + 2)),
+      y: Scpos.y + (CurlWidth + Scrad) * Math.sin(SubTheta * (i * 2 + 2)),
+    };
+    ctx.bezierCurveTo(
+      MidCtr1.x,
+      MidCtr1.y,
+      MidCtr2.x,
+      MidCtr2.y,
+      NewMidPos.x,
+      NewMidPos.y
+    );
+    ctx.bezierCurveTo(
+      MidCtr2.x,
+      MidCtr2.y,
+      EndCtr2.x,
+      EndCtr2.y,
+      NewEndPos.x,
+      NewEndPos.y
+    );
+    }
+    ctx.stroke();
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
 }
 
 function drawInteractDiv(x,y,r){
@@ -42,55 +89,6 @@ function drawInteractDiv(x,y,r){
     
 }
 
-function drawWhile({
-    color = "black",
-    Global = {x:0,y:0},
-    radiusDo = 10,
-    radiusFor = 5,
-    lineWdith=1,
-    centerDo = {x:-5,y:0},
-    centerFor = {x:5,y:0}
-} = {}){
-        const ScradFor =  radiusFor;
-        const ScradDo =  radiusDo;
-        const SccenDo =  centerDo;
-        const SccenFor =  centerFor;
-        ctx.beginPath();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = lineWdith;
-        ctx.arc(SccenDo.x + Global.x, SccenDo.y+ Global.y, ScradDo, 0, 2 * Math.PI);
-        ctx.arc(SccenFor.x+ Global.x, SccenFor.y+ Global.y, ScradFor, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 1;
-}
-
-function drawIf(){
-        ctx.beginPath({
-            color = "black",
-            Global = {x:0,y:0},
-            NumSections = 3,
-            lineWdith=1,
-            TipHight = 5,
-            radius = 10
-        } = {});//TODO cheack
-        const pos =  Global;
-        const rad =  radius;
-        const tip =  TipHight;
-        ctx.strokeStyle =  color;
-        ctx.lineWidth =  lineWdith;
-        ctx.arc( pos.x,  pos.y,  rad, 0, 2 * Math.PI);
-        ctx.moveTo( pos.x, pos.y+ rad);
-        let SectRadi = Math.cos(Math.PI/( NumSections*2))* rad;
-        for(let i = 0;i< NumSections;i++){
-            ctx.moveTo(Math.cos(SectRadi*2*i - SectRadi)* rad,Math.sin(SectRadi*2*i - SectRadi)* rad);
-            ctx.lineTo(Math.cos(SectRadi*2*i - SectRadi)*( rad+ TipHight),Math.sin(SectRadi*2*i - SectRadi)*( rad+ TipHight));
-            ctx.lineTo(Math.cos(SectRadi*2*i + SectRadi)* rad,Math.sin(SectRadi*2*i - SectRadi)* rad);
-        }
-        ctx.stroke();
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 1;
-}
 
 let assets = {};
 window.assets = assets;
@@ -126,4 +124,4 @@ function InitAssets(){
         });
 }
 
-export {drawDiv,drawInteractDiv,drawWhile,drawIf,InitAssets};
+export {drawDiv,drawInteractDiv,drawWhile,drawIf,InitAssets,drawCurl};
