@@ -1,5 +1,5 @@
 import {canvas,ctx,UpdateMouseInteraction} from "./canvas.js";
-import { Division ,ExtendInter,MoveInter, WhileCirc} from "./Comp.js";
+import { Division ,ExtendInter,MoveInter,Curl} from "./Comp.js";
 
 function initCanvasClick(){
     UpdateMouseInteraction();
@@ -9,8 +9,8 @@ function initCanvasClick(){
             if(window.EditorState.type == "div"){
                 addNewDiv();
                 window.EditorState.mode = "edit";
-            }else if(window.EditorState.type == "whileComp"){
-                addWhile();
+            }else if(window.EditorState.type == "curl"){
+                addNewCurl();
                 window.EditorState.mode = "edit";
             }else{
 
@@ -41,6 +41,26 @@ function addNewDiv(){
             
 }
 
+
+function addNewCurl(){
+            let parent = window.TopItems.maxCodeItem;
+            if(!parent.Global){
+                parent.Global = {x:0,y:0};
+            }
+            let NewCurl = new Curl(window.mousePos.x-parent.Global.x,window.mousePos.y-parent.Global.y,"black",1,30);
+            let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewCurl.radius,
+                                            Math.sin(Math.PI*0.25)*NewCurl.radius);
+            let NewMove = new MoveInter(0,0);
+            NewCurl.addChild(NewExtend);
+            NewCurl.addChild(NewMove); 
+            console.log(parent);   
+            if(parent.mode){
+                parent.addChild(NewCurl);
+            }else{
+                window.Componets.Physical.addChild(NewCurl);                     
+            }
+            
+}
 function addWhile(){
             let newWhile = new WhileCirc(window.mousePos.x,window.mousePos.y,"blue",1,30,20,
                 -30,0,

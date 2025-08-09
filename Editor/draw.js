@@ -124,4 +124,4 @@ function InitAssets(){
         });
 }
 
-export {drawDiv,drawInteractDiv,drawWhile,drawIf,InitAssets,drawCurl};
+export {drawDiv,drawInteractDiv,InitAssets,drawCurl};

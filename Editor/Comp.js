@@ -253,6 +253,50 @@ class MoveInter extends Comp{
     }
 }
 
+
+class InterSect extends Comp{
+    constructor(initX,initY){
+        super(initX,initY,"black",1);
+        this.class = "mouse";
+        this.MoveIntRadi = 10;
+    }
+    NotColide(){
+        if(!window.mouseDown){//if out of range only remove drag if mouse up
+            this.drag = false;
+        }
+    }
+    colideEvent(){
+        if(window.mouseDown){//if mouse down and overlap start/cont drag
+            this.drag = true;
+        }
+        
+    }
+    colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
+        return circleOverlap(point,this.Global,r,this.MoveIntRadi);
+    }
+    updateSelf(){
+        if(this.drag){//if it's draging
+           if(window.mouseDown){
+            if(this.parent == null){
+                console.warn("oh no");
+            }else if(this.parent.parent == null){
+                this.parent.pos.x = window.mousePos.x;
+                this.parent.pos.y = window.mousePos.y;
+            }else{
+                this.parent.pos.x = window.mousePos.x - this.parent.parent.Global.x;
+                this.parent.pos.y = window.mousePos.y - this.parent.parent.Global.y;
+            }
+        }
+        }
+    }
+    drawSelf(){
+        if(window.EditorState.mode == "edit"){
+            let MoveIntDim = this.MoveIntRadi*2;
+            ctx.drawImage(assets.move.canvas,this.Global.x-this.MoveIntRadi,this.Global.y-this.MoveIntRadi,MoveIntDim,MoveIntDim);
+        }
+    }
+}
+
 class Division extends Comp{
     constructor(initX,initY,icolor,lineWidth,initradius){
         super(initX,initY,icolor,lineWidth);
@@ -282,7 +326,7 @@ class Division extends Comp{
     }
 }
 
-class CurlyKets extends Comp{
+class Curl extends Comp{
     constructor(initX,initY,icolor,lineWidth,initradius){
         super(initX,initY,icolor,lineWidth);
         this.class = "curlyket";
@@ -313,5 +357,29 @@ class CurlyKets extends Comp{
 }
 //add if groups
 
+class PreView{
+    constructor(color){
+        console.log("Mouse Previews constructed");
+        this.pos = {};
+        this.color = color;
+    }
+    update(){
+        this.pos.x = window.mousePos.x;
+        this.pos.y = window.mousePos.y;
+    }
 
-export {Comp,Division,WhileCirc,IfCirc,PreView,ExtendInter,MoveInter,debugRect,container};
+    draw(){
+        if(window.EditorState.mode == "add"){
+        if(window.EditorState.type == "div"){
+            drawDiv(this);
+        }else if(window.EditorState.type == "whileComp"){
+            drawWhile(this);
+        }else if(window.EditorState.type == "ifComp"){
+            drawIf(this);
+        }
+    }
+        drawCurl(this);
+    }
+
+}
+export {Comp,Division,ExtendInter,MoveInter,debugRect,container,PreView,Curl};
