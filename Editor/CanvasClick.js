@@ -92,11 +92,11 @@ function addNewCurl(){
 }
 
 function UpdateMousePos(e){
-        window.mousePos.x = -window.canvasOffset.x + e.x;
-        window.mousePos.y = -window.canvasOffset.y + e.y;
+        const rect = canvas.getBoundingClientRect();
+        window.mousePos.x = -window.canvasOffset.x + e.x - rect.left;
+        window.mousePos.y = -window.canvasOffset.y + e.y - rect.top;
         window.mousePos.x /= window.GlobalScale;
         window.mousePos.y /= window.GlobalScale;
-
 }
 
 function initCanvasMouseDown(){

@@ -1,13 +1,196 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>M,  Modern.Computational.Magic</title>
-        <link rel="stylesheet" href="./index.css">
-    </head>
-    <body>
+<!-- UI done by chat-GPT -->
+<!-- Don't ask questions I have no idea how the UI works -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>M - Modern Computational Magic</title>
+    <link rel="stylesheet" href="./index.css" />
+</head>
+<body>
+    <header class="top-bar">
+        <div class="brand">
+            <button id="panelToggle" class="panel-toggle" aria-label="Toggle side panel">☰</button>
+            <h1>M — Modern Computational Magic</h1>
+        </div>
 
-        <canvas class="PattenCanvas" hidden></canvas>
-        <canvas class="MainCanvas"></canvas>
+        <div class="top-controls">
+            <!-- Dark Mode Toggle with SVG icons (fill uses currentColor) -->
+            <button id="darkModeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle dark mode" title="Toggle dark mode">
+                <!-- Moon: shown in light mode -->
+                <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    
+                    <g stroke="currentColor" stroke-width="2" fill="none">
+                        <path d="M21 12.79A9 9 0 0 1 11.21 3a7 7 0 1 0 9.79 9.79z"/>
+                </g>
+                </svg>
+                <!-- Sun: shown in dark mode -->
+                <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none;">
+                    <circle cx="12" cy="12" r="5"/>
+                    <g stroke="currentColor" stroke-width="2" fill="none">
+                        <line x1="12" y1="1" x2="12" y2="4"/>
+                        <line x1="12" y1="20" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+                        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="4" y2="12"/>
+                        <line x1="20" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+                        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+                    </g>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <!-- Main Canvas -->
+        <section class="MainCanvasSection" id="mainCanvas" tabindex="0" aria-label="Main canvas area">
+            <canvas class="PattenCanvas" hidden></canvas>
+            <canvas class="MainCanvas"></canvas>
+        </section>
+
+        <!-- Controls Panel -->
+        <aside class="Controls" id="controlsPanel" role="complementary" aria-hidden="false">
+            <div class="controls-header">
+                <div class="controls-title">Components</div>
+                <button id="retractBtn" class="retract-btn" aria-label="Collapse panel">◀</button>
+            </div>
+
+            <div class="CompSelect" role="list">
+                <button class="Comp" id="div" role="listitem" title="Div component">
+                    <img class="compImg" src="./SVG/Div.svg" alt="Div Icon">
+                    <span class="compLabel">Div</span>
+                </button>
+
+                <button class="Comp" id="curl" role="listitem" title="Curl component">
+                    <img class="compImg" src="./SVG/curl.svg" alt="Curl Icon">
+                    <span class="compLabel">curl</span>
+                </button>
+            </div>
+
+            <div class="editors-wrap">
+                <section class="editor-section" data-target="Mcomma">
+                    <header class="editor-header" tabindex="0" role="button" aria-expanded="true">
+                        <span>Mcomma</span>
+                        <button class="toggle-btn" aria-hidden="true">▾</button>
+                    </header>
+                    <div class="CodeEditor" id="Mcomma" contenteditable="true" spellcheck="false" data-lang="javascript">
+                        // Write your Mcomma code here
+                        function greet() {
+                            let name = "world";
+                            console.log(`Hello ${name}`);
+                        }
+                    </div>
+                </section>
+
+                <section class="editor-section" data-target="Mjs">
+                    <header class="editor-header" tabindex="0" role="button" aria-expanded="true">
+                        <span>M.js</span>
+                        <button class="toggle-btn" aria-hidden="true">▾</button>
+                    </header>
+                    <div class="CodeEditor" id="Mjs" contenteditable="true" spellcheck="false" data-lang="javascript">
+                        // Write your JavaScript code here
+                        const sum = (a, b) => a + b;
+                        console.log(sum(2, 3));
+                    </div>
+                </section>
+            </div>
+
+            <footer class="panel-footer">Tip: click an editor header to collapse it. Use the ◀ button to retract the whole panel.</footer>
+        </aside>
+    </main>
+
+    <script>
+        // ========== editor collapse toggles ==========
+        document.querySelectorAll('.editor-section .editor-header').forEach(header => {
+            const section = header.closest('.editor-section');
+            const targetId = section.getAttribute('data-target');
+            header.addEventListener('click', () => {
+                const editor = document.getElementById(targetId);
+                const collapsed = editor.classList.toggle('collapsed');
+                header.setAttribute('aria-expanded', String(!collapsed));
+            });
+            header.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    header.click();
+                }
+            });
+        });
+
+        // ========== dark mode toggle (SVG swap + initial state) ==========
+        const darkToggle = document.getElementById('darkModeToggle');
+        const moonIcon = document.getElementById('moonIcon');
+        const sunIcon = document.getElementById('sunIcon');
+
+        function setDarkMode(on) {
+            document.body.classList.toggle('dark-mode', on);
+            darkToggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+            // swap icons
+            moonIcon.style.display = on ? 'none' : 'inline';
+            sunIcon.style.display = on ? 'inline' : 'none';
+        }
+
+        // initialize based on existing body class (or default to light)
+        document.addEventListener('DOMContentLoaded', () => {
+            setDarkMode(document.body.classList.contains('dark-mode'));
+        });
+
+        darkToggle.addEventListener('click', () => {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        });
+
+        // ========== retractable side panel ==========
+        const controls = document.getElementById('controlsPanel');
+        const retractBtn = document.getElementById('retractBtn');
+        const panelToggle = document.getElementById('panelToggle');
+
+        function setPanelHidden(hidden) {
+            controls.classList.toggle('collapsed', hidden);
+            controls.setAttribute('aria-hidden', hidden ? 'true' : 'false');
+            retractBtn.textContent = hidden ? '▶' : '◀';
+        }
+        retractBtn.addEventListener('click', () => setPanelHidden(!controls.classList.contains('collapsed')));
+        panelToggle.addEventListener('click', () => setPanelHidden(!controls.classList.contains('collapsed')));
+        document.getElementById('mainCanvas').addEventListener('dblclick', () => setPanelHidden(!controls.classList.contains('collapsed')));
+
+        function applyResponsiveDefault() {
+            if (window.innerWidth <= 768) setPanelHidden(true); else setPanelHidden(false);
+        }
+        window.addEventListener('resize', applyResponsiveDefault);
+        applyResponsiveDefault();
+
+        // ========== simple syntax highlighting (light-weight) ==========
+        function highlightCode(el) {
+            const lang = el.dataset.lang;
+            if (lang === "javascript") {
+                // use innerText so HTML tags are not double-escaped
+                let raw = el.innerText;
+                // escape HTML to be safe
+                raw = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                let html = raw
+                    .replace(/(\/\/.*)/g, '<span class="token comment">$1</span>')
+                    .replace(/(\b(function|return|let|const|var|if|else|for|while|class|new|this|const|=>)\b)/g, '<span class="token keyword">$1</span>')
+                    .replace(/("[^"]*"|'[^']*'|`[^`]*`)/g, '<span class="token string">$1</span>')
+                    .replace(/\b(\d+)\b/g, '<span class="token number">$1</span>')
+                    .replace(/\b([a-zA-Z_]\w*)(?=\s*\()/g, '<span class="token function">$1</span>');
+                el.innerHTML = html;
+            }
+        }
+
+        document.querySelectorAll('.CodeEditor').forEach(editor => {
+            // initial highlight
+            highlightCode(editor);
+
+            // re-highlight on input; slight debounce to reduce flicker
+            let t;
+            editor.addEventListener('input', () => {
+                clearTimeout(t);
+                t = setTimeout(() => highlightCode(editor), 150);
+            });
+        });
+    </script>
         <script src="Global.js"></script>
         <script type="module" src="./overlap.js"></script>
         <script type="module" src="./Comp.js"></script>
@@ -15,21 +198,5 @@
         <script type="module" src="./canvas.js"></script>
         <script type="module" src="./Controles.js"></script>
         <script type="module" src="./draw.js"></script>
-        <div class="Controls">
-            <div class="CompSelect">
-                <div class="Comp" id="div">
-                    <img class="compImg" src="./SVG/Div.svg" alt="div Icon" width="200" height="200">
-                </div>
-                <div class="Comp" id="curl">
-                    <img class="compImg" src="./SVG/curl.svg" alt="curl Icon" width="200" height="200">
-                </div>
-            </div>
-            <div class="CodeEditor" id="Mcomma">
-                    ihuabihsd<!--code editor for the corosponding Mcomma code-->
-            </div>
-            <div class="CodeEditor" id="Mjs">
-                    ihuabihsd<!--code editor for the corosponding M javascript code-->
-            </div>
-        </div>
-    </body>
+</body>
 </html>

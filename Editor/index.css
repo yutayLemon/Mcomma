@@ -1,44 +1,200 @@
+/* UI done by chat-GPT */
+/* Don't ask questions I have no idea how the UI works */
+
+
+:root{
+    --blonde: #f8d775;
+    --blonde-2: #e9c84a;
+    --bg-light: #fffaf0;
+    --panel-bg: rgba(255,228,196,0.92);
+    --muted: rgba(0,0,0,0.6);
+    --radius: 12px;
+    --shadow: 0 6px 18px rgba(0,0,0,0.08);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+    --icon-color: #222; /* icon color for light mode */
+}
+
+* { box-sizing: border-box; }
+html,body { height: 100%; margin: 0; font-family: Inter, "Segoe UI", system-ui; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+/* Base light background */
+body {
+    background: linear-gradient(180deg,var(--bg-light), #fff);
+    color: #1d1d1d;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+}
+
+/* Dark mode variables */
+body.dark-mode {
+    background: linear-gradient(180deg,#0e0e10,#0b0b0b);
+    color: #eaeaea;
+    --icon-color: #fff; /* icons become white in dark mode */
+}
+/* Force icon color for light mode */
+.icon-btn svg {
+    fill: #222; /* dark gray/black in light mode */
+}
+
+/* Force icon color for dark mode */
+body.dark-mode .icon-btn svg {
+    fill: #fff; /* white in dark mode */
+}
+
+
+/* Top bar */
+.top-bar {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0.6rem 1rem;
+    background: linear-gradient(90deg,var(--blonde),var(--blonde-2));
+    box-shadow: var(--shadow);
+    z-index: 20;
+}
+
+.top-bar .brand { display:flex; align-items:center; gap:0.75rem; }
+.top-bar h1 { font-size:1rem; margin:0; }
+
+/* top-controls styling so icon shows clearly */
+.top-controls { display:flex; align-items:center; gap:0.5rem; }
+.icon-btn {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:40px;
+    height:36px;
+    border-radius:8px;
+    background: rgba(255,255,255,0.0);
+    border: 0;
+    cursor:pointer;
+    color: var(--icon-color);
+    transition: background 160ms ease, color 160ms ease, transform 120ms ease;
+}
+.icon-btn:hover { background: rgba(0,0,0,0.05); transform: translateY(-1px); }
+.icon-btn:focus { outline: 3px solid rgba(0,0,0,0.08); }
+
+/* Layout */
+.app-container { display:flex; flex:1; min-height:0; overflow:hidden; }
+.MainCanvasSection {
+    flex: 1;
+    position: relative; /* so canvases can be positioned */
+}
+
 .MainCanvas{
-     padding: 0px;
-     margin: 0px;
-     position: absolute;
-     left: 0px;
-     top: 0px;
-     cursor: crosshair;
-}
-
-.Controls{
-    background-color: rgba(0, 0, 0, 0.2);
-    height: 100vw;
-    width: 20vw;
-    padding: 0px;
-    margin: 0px;
     position: absolute;
-    right: 0px;
-    top: 0px;
+    top: 0;
+    left: 0;
+    width: 100%;   /* fill container */
+    height: 100%;  /* fill container */
+    display: block;
 }
 
-.CompSelect{
-    width: 100%;
-    height: 20%;
-    background-color: rgba(255, 228, 196, 0.5);
-    display: flex;
-}
 
+/* Controls panel */
+.Controls {
+    width:300px;
+    min-width:220px;
+    background: var(--panel-bg);
+    display:flex;
+    flex-direction:column;
+    transition: transform 0.28s cubic-bezier(.2,.9,.2,1), width 0.28s;
+    box-shadow: -6px 0 18px rgba(0,0,0,0.06);
+}
+.Controls.collapsed { transform: translateX(102%); }
+
+/* panel header */
+.controls-header {
+    display:flex;
+    justify-content:space-between;
+    padding:0.6rem 0.8rem;
+    background: linear-gradient(90deg,var(--blonde),var(--blonde-2));
+}
+.retract-btn { border:0; background:transparent; cursor:pointer; font-size:16px; }
+
+/* components */
+.CompSelect {
+    display:flex;
+    gap:0.6rem;
+    padding:0.9rem;
+}
 .Comp{
-    border: 2px solid green;
-    width: 30%;
-    height: 30%;
-    background-color: rgba(0, 100, 196, 0.5);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:0.6rem;
+    border-radius:10px;
+    border:1px solid rgba(0,0,0,0.06);
+    background: rgba(255,255,255,0.75);
+    width:86px;
+    cursor:pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.Comp:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+.compImg { width:48px; height:48px; object-fit:contain; }
+.compLabel { font-size:12px; color:var(--muted); }
+
+/* editors area */
+.editors-wrap { padding:0.6rem; display:flex; flex-direction:column; gap:0.6rem; flex:1; min-height:0; }
+.editor-section { background: rgba(255,255,255,0.75); border-radius:10px; overflow:hidden; border:1px solid rgba(0,0,0,0.04); }
+.editor-header {
+    display:flex;
+    justify-content:space-between;
+    padding:0.6rem 0.8rem;
+    font-weight:600;
+    cursor:pointer;
+    background: linear-gradient(90deg,var(--blonde),#fff);
+}
+.CodeEditor {
+    padding: 0.6rem 0.8rem;
+    font-family: var(--mono);
+    font-size: 13px;
+    overflow: hidden; /* hide contents during animation */
+    white-space: pre-wrap;
+    background: rgba(0,0,0,0.02);
+    height: auto;
+    max-height: 260px;
+    opacity: 1;
+    transition:
+        max-height 0.3s ease,
+        opacity 0.3s ease,
+        padding 0.3s ease;
 }
 
-.compImg{
-    width: 100%;
-    height: 100%;
+.CodeEditor.collapsed {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: none;
 }
 
-html{
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+/* syntax highlighting tokens */
+.token.keyword { color: #d73a49; font-weight: 500; }
+.token.string { color: #032f62; }
+.token.number { color: #005cc5; }
+.token.function { color: #6f42c1; }
+.token.comment { color: #6a737d; font-style: italic; }
+
+/* dark mode token overrides */
+body.dark-mode .token.keyword { color: #ff7b72; }
+body.dark-mode .token.string { color: #a5d6ff; }
+body.dark-mode .token.number { color: #79c0ff; }
+body.dark-mode .token.function { color: #d2a8ff; }
+body.dark-mode .token.comment { color: #8b949e; }
+
+/* dark-mode tweaks to panels and editors */
+body.dark-mode .Controls { background: rgba(28,28,28,0.72); border-left: 1px solid rgba(255,255,255,0.03); }
+body.dark-mode .CodeEditor { background: rgba(255,255,255,0.02); color:#eaeaea; }
+body.dark-mode .editor-header { background: linear-gradient(90deg,#222,#171717); color:#eee; }
+body.dark-mode .controls-header { background: linear-gradient(90deg,#202020,#111); color:#eee; }
+
+/* footer */
+.panel-footer { padding:0.6rem 0.8rem; font-size:12px; color:var(--muted); border-top:1px solid rgba(0,0,0,0.04); }
+
+/* small screens */
+@media (max-width: 768px) {
+    .Controls { position:absolute; right:0; top:56px; height:calc(100% - 56px); z-index:30; }
+    .CodeEditor { min-height:88px; max-height:160px; font-size:13px; }
 }

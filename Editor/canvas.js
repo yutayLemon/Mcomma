@@ -3,8 +3,10 @@ const PattCanvas = document.querySelector(".PattenCanvas");
 PattCanvas.width = 30;
 PattCanvas.height = 30;
 const pctx = PattCanvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const rect = canvas.parentElement.getBoundingClientRect();
+canvas.width = rect.width;
+canvas.height = rect.height;
+
 const ctx = canvas.getContext("2d");
 
 
@@ -34,9 +36,10 @@ function UpdateCanvas(){
 }
 
 function CanvasResize(){
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
     ctx.translate(canvas.width/2,canvas.height/2);
     window.canvasOffset = {x:canvas.width/2,y:canvas.height/2}
 }
