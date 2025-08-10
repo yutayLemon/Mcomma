@@ -1,5 +1,5 @@
 import {canvas,ctx,UpdateMouseInteraction} from "./canvas.js";
-import { Division ,ExtendInter,MoveInter,Curl,InterSect} from "./Comp.js";
+import { Division ,ExtendInter,MoveInter,Curl,InterSect,overlap} from "./Comp.js";
 
 function initCanvasClick(){
     UpdateMouseInteraction();
@@ -48,25 +48,46 @@ function addNewCurl(){
             let parent = window.TopItems.maxCodeItem;
             parent.Global ??= {x: 0, y: 0};
             let button = window.TopItems.maxItem;
+           
+            let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*30,
+                                            Math.sin(Math.PI*0.25)*30);
+            let NewMove = new MoveInter(0,0);
+            let NewCurl = {};
+            if(button.class == "inter" && button.parent.class == "div"){
+                NewCurl = new Curl(window.mousePos.x-button.parent.Global.x,
+                                       window.mousePos.y-button.parent.Global.y,
+                                       "black",1,30);
+                button.parent.addChild(NewCurl);
 
-            if(button.class == "inter"){
-                console.log("added onto");
+                let NewOverlap = new overlap(NewCurl);//add body
+                button.parent.addChild(NewOverlap);//add to sorce
+
+            }else if(button.class == "inter" && button.parent.class == "curl"){
+                NewCurl = new Curl(window.mousePos.x-button.parent.Global.x,
+                                       window.mousePos.y-button.parent.Global.y,
+                                       "black",1,30);
+
+                button.parent.addChild(NewCurl);
+
+                let NewOverlap = new overlap(NewCurl);//add body
+                button.parent.addChild(NewOverlap);//add to sorce
+
+            }else if(button.class == "inter"){
+                console.warn("not supported intersection:"+button.arent.class);
             }else{
+                NewCurl = new Curl(window.mousePos.x-parent.Global.x,
+                                       window.mousePos.y-parent.Global.y,
+                                       "black",1,30);
+                //if parent not valid use comp physical
+                (parent.mode ? parent : window.Componets.Physical).addChild(NewCurl);
                 console.log("added normaly");
             }
-            
-            let NewCurl = new Curl(window.mousePos.x-parent.Global.x,window.mousePos.y-parent.Global.y,"black",1,30);
-            if(parent.mode){//have to add right after for correct layer proagation
-                parent.addChild(NewCurl);
-            }else{
-                window.Componets.Physical.addChild(NewCurl);                     
-            }
-
-            let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewCurl.radius,
-                                            Math.sin(Math.PI*0.25)*NewCurl.radius);
-            let NewMove = new MoveInter(0,0);
             NewCurl.addChild(NewExtend);
-            NewCurl.addChild(NewMove);    
+            NewCurl.addChild(NewMove);  
+            
+            
+
+              
             
 }
 

@@ -6,3 +6,11 @@ function McommaTreeToText(obj){
         }
     }
 }
+
+function LogMcommaTree(obj){
+    var Res = "";
+    for(const [key,val] in obj){
+        Res+= key + "\n";
+        
+    }
+}

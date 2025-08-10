@@ -20,7 +20,7 @@ class Comp{
         this.PostUpdate = false;
         this.PostDraw = false;
         this.PostColide = false;
-        this.MouseOver = true;
+        this.MouseOver = false;
         this.drag = false;
         this.CodeComp = false;
         this.vertial = false;
@@ -29,6 +29,9 @@ class Comp{
     initReach(){
         this.initReachSelf();
         this.initRechChildren();
+    }
+    log(){
+        logTree(this);
     }
     initReachSelf(){
         this.Reached = false;
@@ -79,6 +82,7 @@ class Comp{
             }
         }
     }
+   
     toText(){
         return "";
     }
@@ -105,6 +109,7 @@ class Comp{
     colide(point,r,ColideArr){//ColideArr - stores the object wich colided
         let ColideRes = this.colideSelf(point,r) || {buffer:false,Exact:false};
         this.PostColide = true;
+        this.MouseOver = ColideRes.Exact;
         if(ColideRes.buffer){
             //clides with a buffer zone
             this.colideChildren(point,r,ColideArr);
@@ -164,6 +169,29 @@ class container extends Comp{//These are vertial
     }
     colideSelf(){
         return {buffer:true,Exact:false}
+    }
+    drawSelf(){
+        //no render
+    }
+}
+
+
+class overlap extends Comp{//These are vertial
+    constructor(Body){
+        super(0,0,"white",0);
+        this.vertial = false;
+        this.Body = Body;
+        this.class = "overlap";
+    }
+    colideEvent(){
+    }
+    colideSelf(){
+        if(this.Body.PostColide && this.parent.PostColide){
+            if(this.Body.MouseOver && this.parent.MouseOver){
+                return {Exact:true,buffer:true};
+            }
+        }
+        return {Exact:false,buffer:false};
     }
     drawSelf(){
         //no render
@@ -371,4 +399,17 @@ class PreView{
     }
 
 }
-export {Comp,Division,ExtendInter,MoveInter,debugRect,container,PreView,Curl,InterSect};
+
+
+function logTree(node, indent = "") {//pulled from chatGPT
+  const className = node.constructor?.name || "UnknownClass";//pulled from chatGPT
+  console.log(`${indent}- ${className}`);//pulled from chatGPT
+
+  if (Array.isArray(node.children)) {//pulled from chatGPT
+    for (const child of node.children) {//pulled from chatGPT
+      logTree(child, indent + "  ");//pulled from chatGPT
+    }
+  }
+}
+
+export {Comp,Division,ExtendInter,MoveInter,debugRect,container,PreView,Curl,InterSect,overlap};
