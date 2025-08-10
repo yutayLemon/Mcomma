@@ -25,7 +25,7 @@ function drawCurl({
 } = {}){
     const Scpos = Global;
     const Scrad = radius;
-    const CurlWidth = Scrad * 0.3;
+    const CurlWidth = Scrad * 0.2;
     const PeakCount = 7;
     ctx.beginPath();
     ctx.strokeStyle = color;
@@ -81,13 +81,7 @@ function drawCurl({
     ctx.lineWidth = 1;
 }
 
-function drawInteractDiv(x,y,r){
-    let MoveIntDim = 20;
-    let ExpandIntDim = 20;
-    ctx.drawImage(assets.move.canvas,x-MoveIntDim*0.5,y-MoveIntDim*0.5,MoveIntDim,MoveIntDim);
-    ctx.drawImage(assets.Expand.canvas,x-ExpandIntDim*0.5-Math.cos(Math.PI*0.25)*r,y-ExpandIntDim*0.5-Math.cos(Math.PI*0.25)*r,ExpandIntDim,ExpandIntDim);
-    
-}
+
 
 
 let assets = {};
@@ -112,11 +106,13 @@ function LoadMoveToggle(link){
 function InitAssets(){
         let MoveAssert = LoadMoveToggle("./SVG/move.svg"); // from https://www.svgrepo.com/svg/533693/move-alt
         let ExpandAssert = LoadMoveToggle("./SVG/expand.svg"); // from https://www.svgrepo.com/svg/357722/expand-left
+        let InterAsset = LoadMoveToggle("./SVG/inter.svg");//from https://www.svgrepo.com/svg/54622/intersection
 
-        return Promise.all([MoveAssert,ExpandAssert])
-        .then(([objMove,objExpand])=>{
+        return Promise.all([MoveAssert,ExpandAssert,InterAsset])
+        .then(([objMove,objExpand,objInter])=>{
             assets.move = objMove;
             assets.Expand = objExpand;
+            assets.Inter = objInter;
             console.log("init:loaded assets");
             return "done";
         }).catch((err)=>{
@@ -124,4 +120,4 @@ function InitAssets(){
         });
 }
 
-export {drawDiv,drawInteractDiv,InitAssets,drawCurl};
+export {drawDiv,InitAssets,drawCurl};

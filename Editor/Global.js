@@ -17,8 +17,8 @@ window.SetScale = (n)=>{
     window.GlobalScale = n;
 }
 window.TopItems = {
-    maxCodeItem:{},
-    maxItem:{}
+    maxCodeItem:{class:"null"},
+    maxItem:{class:"null"}
 }
 
 window.canvasOffset = {x:0,y:0};

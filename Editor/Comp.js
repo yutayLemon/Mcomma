@@ -257,8 +257,8 @@ class MoveInter extends Comp{
 class InterSect extends Comp{
     constructor(initX,initY){
         super(initX,initY,"black",1);
-        this.class = "mouse";
-        this.MoveIntRadi = 10;
+        this.class = "inter";
+        this.Radi = 10;
     }
     NotColide(){
         if(!window.mouseDown){//if out of range only remove drag if mouse up
@@ -272,27 +272,16 @@ class InterSect extends Comp{
         
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
-        return circleOverlap(point,this.Global,r,this.MoveIntRadi);
+        return circleOverlap(point,this.Global,r,this.Radi);
     }
     updateSelf(){
-        if(this.drag){//if it's draging
-           if(window.mouseDown){
-            if(this.parent == null){
-                console.warn("oh no");
-            }else if(this.parent.parent == null){
-                this.parent.pos.x = window.mousePos.x;
-                this.parent.pos.y = window.mousePos.y;
-            }else{
-                this.parent.pos.x = window.mousePos.x - this.parent.parent.Global.x;
-                this.parent.pos.y = window.mousePos.y - this.parent.parent.Global.y;
-            }
-        }
-        }
+        this.pos.x = this.parent.radius;
+        this.pos.y = 0;
     }
     drawSelf(){
-        if(window.EditorState.mode == "edit"){
-            let MoveIntDim = this.MoveIntRadi*2;
-            ctx.drawImage(assets.move.canvas,this.Global.x-this.MoveIntRadi,this.Global.y-this.MoveIntRadi,MoveIntDim,MoveIntDim);
+        if(window.EditorState.mode == "add"){
+            let Dim = this.Radi*2;
+            ctx.drawImage(assets.Inter.canvas,this.Global.x-this.Radi,this.Global.y-this.Radi,Dim,Dim);
         }
     }
 }
@@ -382,4 +371,4 @@ class PreView{
     }
 
 }
-export {Comp,Division,ExtendInter,MoveInter,debugRect,container,PreView,Curl};
+export {Comp,Division,ExtendInter,MoveInter,debugRect,container,PreView,Curl,InterSect};

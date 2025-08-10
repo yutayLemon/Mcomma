@@ -1,5 +1,5 @@
 import {canvas,ctx,UpdateMouseInteraction} from "./canvas.js";
-import { Division ,ExtendInter,MoveInter,Curl} from "./Comp.js";
+import { Division ,ExtendInter,MoveInter,Curl,InterSect} from "./Comp.js";
 
 function initCanvasClick(){
     UpdateMouseInteraction();
@@ -23,57 +23,51 @@ function initCanvasClick(){
 
 function addNewDiv(){
             let parent = window.TopItems.maxCodeItem;
-            if(!parent.Global){
-                parent.Global = {x:0,y:0};
-            }
+            parent.Global ??= {x: 0, y: 0};
+            let button = window.TopItems.maxItem;
+            
             let NewDiv = new Division(window.mousePos.x-parent.Global.x,window.mousePos.y-parent.Global.y,"black",1,30);
-            let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewDiv.radius,
-                                            Math.sin(Math.PI*0.25)*NewDiv.radius);
-            let NewMove = new MoveInter(0,0);
-            NewDiv.addChild(NewExtend);
-            NewDiv.addChild(NewMove); 
-            console.log(parent);   
             if(parent.mode){
                 parent.addChild(NewDiv);
             }else{
                 window.Componets.Physical.addChild(NewDiv);                     
             }
+            let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewDiv.radius,
+                                            Math.sin(Math.PI*0.25)*NewDiv.radius);
+            let NewInter = new InterSect(NewDiv.radius,0);
+            let NewMove = new MoveInter(0,0);
+            NewDiv.addChild(NewExtend);
+            NewDiv.addChild(NewMove); 
+            NewDiv.addChild(NewInter); 
+            
             
 }
 
 
 function addNewCurl(){
             let parent = window.TopItems.maxCodeItem;
-            if(!parent.Global){
-                parent.Global = {x:0,y:0};
+            parent.Global ??= {x: 0, y: 0};
+            let button = window.TopItems.maxItem;
+
+            if(button.class == "inter"){
+                console.log("added onto");
+            }else{
+                console.log("added normaly");
             }
+            
             let NewCurl = new Curl(window.mousePos.x-parent.Global.x,window.mousePos.y-parent.Global.y,"black",1,30);
-            let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewCurl.radius,
-                                            Math.sin(Math.PI*0.25)*NewCurl.radius);
-            let NewMove = new MoveInter(0,0);
-            NewCurl.addChild(NewExtend);
-            NewCurl.addChild(NewMove); 
-            console.log(parent);   
-            if(parent.mode){
+            if(parent.mode){//have to add right after for correct layer proagation
                 parent.addChild(NewCurl);
             }else{
                 window.Componets.Physical.addChild(NewCurl);                     
             }
-            
-}
-function addWhile(){
-            let newWhile = new WhileCirc(window.mousePos.x,window.mousePos.y,"blue",1,30,20,
-                -30,0,
-                 30,0
-            );
-            let NewMove = new MoveInter(0,0);
-            let NewExtendDo = new ExtendInter(-60,0);
-            let NewExtendFor = new ExtendInter(60,0);
-            newWhile.addChild(NewExtendDo);
-            newWhile.addChild(NewExtendFor);
-            newWhile.addChild(NewMove);
 
-            window.Componets.Physical.addChild(newWhile);
+            let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*NewCurl.radius,
+                                            Math.sin(Math.PI*0.25)*NewCurl.radius);
+            let NewMove = new MoveInter(0,0);
+            NewCurl.addChild(NewExtend);
+            NewCurl.addChild(NewMove);    
+            
 }
 
 function UpdateMousePos(e){
