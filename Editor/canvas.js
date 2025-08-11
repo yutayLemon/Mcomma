@@ -10,15 +10,17 @@ canvas.height = rect.height;
 const ctx = canvas.getContext("2d");
 
 
-function UpdateCanvas(){
-    ctx.save();
+function UpdateCanvas(){ 
     window.EditorState.debug = true;
- 
-    ctx.scale(window.GlobalScale,window.GlobalScale);
     let inverseScale = 1/window.GlobalScale;
-    ctx.clearRect(-canvas.width*inverseScale*(1/2), -canvas.height*inverseScale*(1/2), canvas.width*inverseScale, canvas.height*inverseScale);
     
-    Grid(30); 
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+    Grid(30*window.GlobalScale); //grid and clear befor scaling and positioning
+
+    ctx.translate(canvas.width/2,canvas.height/2);
+    ctx.scale(window.GlobalScale,window.GlobalScale);
+    
     
     window.Componets.Physical.initReach();
 
@@ -31,7 +33,6 @@ function UpdateCanvas(){
     window.Componets.DebugPhysical.draw();
 
     UpdateMouseInteraction();
-    ctx.restore();
     requestAnimationFrame(()=>{UpdateCanvas()});
 }
 
@@ -124,8 +125,7 @@ function Grid(len){
     const pattern = ctx.createPattern(PattCanvas, 'repeat');
     ctx.fillStyle = pattern;
     let inverseScale = 1/window.GlobalScale;
-    ctx.fillRect(-canvas.width*inverseScale*(1/2), -canvas.height*inverseScale*(1/2),
-                  canvas.width*inverseScale, canvas.height*inverseScale);
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 }
 
 export{canvas,ctx,UpdateCanvas,Grid,initResize,UpdateMouseInteraction};

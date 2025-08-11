@@ -46,44 +46,48 @@ function addNewDiv(){
 
 function addNewCurl(){
             let parent = window.TopItems.maxCodeItem;
+            let radius = 30;
             parent.Global ??= {x: 0, y: 0};
             let button = window.TopItems.maxItem;
            
-            let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*30,
-                                            Math.sin(Math.PI*0.25)*30);
+            let NewExtend = new ExtendInter(Math.sin(Math.PI*0.25)*radius,
+                                            Math.sin(Math.PI*0.25)*radius);
             let NewMove = new MoveInter(0,0);
+            let NewInter = new InterSect(radius,0);
             let NewCurl = {};
             if(button.class == "inter" && button.parent.class == "div"){
                 NewCurl = new Curl(window.mousePos.x-button.parent.Global.x,
                                        window.mousePos.y-button.parent.Global.y,
-                                       "black",1,30);
+                                       "black",1,radius);
                 button.parent.addChild(NewCurl);
+                NewCurl.FlagAsExtruding();
 
-                let NewOverlap = new overlap(NewCurl);//add body
-                button.parent.addChild(NewOverlap);//add to sorce
+                let NewOverlap = new overlap(button.parent);//add body
+                NewCurl.addChild(NewOverlap);//add to sorce
 
             }else if(button.class == "inter" && button.parent.class == "curl"){
                 NewCurl = new Curl(window.mousePos.x-button.parent.Global.x,
                                        window.mousePos.y-button.parent.Global.y,
-                                       "black",1,30);
-
+                                       "black",1,radius);
                 button.parent.addChild(NewCurl);
+                NewCurl.FlagAsExtruding();
 
-                let NewOverlap = new overlap(NewCurl);//add body
-                button.parent.addChild(NewOverlap);//add to sorce
-
+                let NewOverlap = new overlap(button.parent);//add body
+                NewCurl.addChild(NewOverlap);//add to sorce
+                
             }else if(button.class == "inter"){
-                console.warn("not supported intersection:"+button.arent.class);
+                console.warn("not supported intersection:"+button.parent.class);
             }else{
                 NewCurl = new Curl(window.mousePos.x-parent.Global.x,
                                        window.mousePos.y-parent.Global.y,
-                                       "black",1,30);
+                                       "black",1,radius);
                 //if parent not valid use comp physical
                 (parent.mode ? parent : window.Componets.Physical).addChild(NewCurl);
                 console.log("added normaly");
             }
             NewCurl.addChild(NewExtend);
             NewCurl.addChild(NewMove);  
+            NewCurl.addChild(NewInter);  
             
             
 

@@ -24,6 +24,8 @@ class Comp{
         this.drag = false;
         this.CodeComp = false;
         this.vertial = false;
+        this.ExtrudingChild = [];
+        this.isExtruding = false;
         
     };
     initReach(){
@@ -124,6 +126,8 @@ class Comp{
         }else{
             this.NotColide(point,r);
         }
+        this.colideExtruding(point,r,ColideArr);
+        
         
         return ColideRes;
     }
@@ -135,6 +139,25 @@ class Comp{
             if(!item.PostColide){
                 item.colide(point,r,ColideArr);
             }
+        }
+    }
+    colideExtruding(point,r,ColideArr){
+        for(const item of this.ExtrudingChild){
+            if(!item.PostColide){
+                item.colide(point,r,ColideArr);
+            }
+        }
+    }
+
+    FlagAsExtruding(){
+        this.isExtruding = true;
+        this.NotExtrudingParent().ExtrudingChild.push(this);
+    }
+    NotExtrudingParent(){
+        if(this.isExtruding){
+            return this.parent.NotExtrudingParent();
+        }else{
+            return this;
         }
     }
 }
@@ -180,8 +203,9 @@ class overlap extends Comp{//These are vertial
     constructor(Body){
         super(0,0,"white",0);
         this.vertial = false;
-        this.Body = Body;
+        this.Body = Body;//body is the sorce of over lap eg division
         this.class = "overlap";
+        this.CodeComp = true;
     }
     colideEvent(){
     }
@@ -346,7 +370,7 @@ class Division extends Comp{
 class Curl extends Comp{
     constructor(initX,initY,icolor,lineWidth,initradius){
         super(initX,initY,icolor,lineWidth);
-        this.class = "curlyket";
+        this.class = "curl";
         this.radius = initradius;
         this.CodeComp = true;
     }

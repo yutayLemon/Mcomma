@@ -37,8 +37,7 @@ function main(){
         this.pos.y += 1;
     }
 
-    MainScope.Vertial.addChild(new PreView("red"));
-
+    //MainScope.Vertial.addChild(new PreView("red"));
 
     UpdateCanvas(Componets);
 }
