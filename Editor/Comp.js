@@ -86,9 +86,12 @@ class Comp{
     }
    
     toText(){
-        return "";
+        let strFin = "";
+        for(const item of this.children){
+            strFin += item.toText();
+        }   
+        return strFin;
     }
-    
     globalPos(){
         if(this.parent == null){
             return this.pos;
@@ -345,13 +348,7 @@ class Division extends Comp{
         this.radius = initradius;
         this.CodeComp = true;
     }
-     toText(){
-        let strFin = "";
-        for(const item of this.children){
-            strFin += item.toText();
-        }   
-        return strFin;
-    }
+     
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,this.radius,r);
     }
