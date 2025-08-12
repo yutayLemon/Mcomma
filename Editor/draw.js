@@ -1,10 +1,17 @@
 import { canvas,ctx } from "./canvas.js";
+import {SpiralText} from "./textProces.js";
 
 function drawDiv({
     color = "black",
     Global = {x:0,y:0},
     radius = 10,
-    lineWdith=1
+    lineWdith=1,
+    txt = {
+            context : "",
+            font : "sans-serif",
+            size : 20,
+            color : "black"
+        }
 } = {}){
         const Scpos =  Global;
         const Scrad =  radius;
@@ -12,6 +19,7 @@ function drawDiv({
         ctx.strokeStyle = color;
         ctx.lineWidth = lineWdith;
         ctx.arc(Scpos.x, Scpos.y,Scrad, 0, 2 * Math.PI);
+        SpiralText(ctx,txt.context,radius,Global,txt.size,txt.color,txt.font);
         ctx.stroke();
         ctx.strokeStyle = "black";
         ctx.lineWidth = 1;

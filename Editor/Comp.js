@@ -27,7 +27,17 @@ class Comp{
         this.ExtrudingChild = [];
         this.isExtruding = false;
         
+        this.txt = {
+            context : "",
+            font : "sans-serif",
+            size : 20,
+            color : "black"
+        }
+        
     };
+    SetText(txt){
+        this.txtCtx = txt;
+    }
     initReach(){
         this.initReachSelf();
         this.initRechChildren();
@@ -347,6 +357,7 @@ class Division extends Comp{
         this.class = "div";
         this.radius = initradius;
         this.CodeComp = true;
+        this.txt.context = "testabcdefigiihia\n jashfbkjijf";
     }
      
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
