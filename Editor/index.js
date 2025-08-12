@@ -3,7 +3,7 @@
 import {Comp,Division, PreView,debugRect,container} from "./Comp.js";
 import { canvas,ctx ,UpdateCanvas,initResize} from "./canvas.js";
 import {initControl} from "./Controles.js";
-import {initCanvasHover,initCanvasClick,initCanvasMouseDown,initCanvasMouseUp,initWheelScroll} from "./CanvasClick.js"
+import {initKeyInput,initCanvasHover,initCanvasClick,initCanvasMouseDown,initCanvasMouseUp,initWheelScroll} from "./CanvasClick.js"
 import {InitAssets} from "./draw.js"
 
 
@@ -15,6 +15,7 @@ initCanvasHover();
 initCanvasMouseDown();
 initCanvasMouseUp();
 initWheelScroll();
+initKeyInput();
 
 Promise.all([InitAssets()])
 .then(()=>{

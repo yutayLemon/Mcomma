@@ -22,3 +22,10 @@ window.TopItems = {
 }
 
 window.canvasOffset = {x:0,y:0};
+
+window.TextSetting = {
+    elemt:{},
+    lastBlink:0,
+    blink : true,
+    focus:false
+}

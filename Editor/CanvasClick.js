@@ -16,6 +16,9 @@ function initCanvasClick(){
 
             }
             //TODO division detection
+        }else if(window.EditorState.mode == "edit"){
+            window.TextSetting.focus = true;
+            window.TextSetting.elemt = window.TopItems.maxCodeItem;
         }
     });
     console.log("init:canvas click event");
@@ -135,4 +138,26 @@ function initWheelScroll(){
     console.log("init:scroll wheel");
 }
 
-export {initCanvasClick,initCanvasHover,initCanvasMouseDown,initCanvasMouseUp,initWheelScroll}
+function initKeyInput(){
+    window.addEventListener("keydown",(e)=>{
+        if(e.key.length == 1){
+            if(window.TextSetting.elemt.txt){
+                window.TextSetting.elemt.txt.context += e.key;
+            }
+        }else{
+        switch (e.key) {
+            case "Backspace":
+                window.TextSetting.elemt.txt.context = window.TextSetting.elemt.txt.context.slice(0, -1);
+                break;
+            case "Enter":
+                window.TextSetting.elemt.txt.context += "\n";
+                break;
+            default:
+                break;
+        }
+    }
+    });
+    console.log("init:Key input");
+}
+
+export {initKeyInput,initCanvasClick,initCanvasHover,initCanvasMouseDown,initCanvasMouseUp,initWheelScroll}

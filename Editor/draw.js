@@ -29,7 +29,13 @@ function drawCurl({
     color = "black",
     Global = {x:0,y:0},
     radius = 10,
-    lineWdith=1
+    lineWdith=1,
+    txt = {
+            context : "",
+            font : "sans-serif",
+            size : 20,
+            color : "black"
+        }
 } = {}){
     const Scpos = Global;
     const Scrad = radius;
@@ -85,6 +91,7 @@ function drawCurl({
     );
     }
     ctx.stroke();
+      SpiralText(ctx,txt.context,radius-CurlWidth,Global,txt.size,txt.color,txt.font);
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 1;
 }
