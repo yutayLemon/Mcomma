@@ -29,3 +29,6 @@ window.TextSetting = {
     blink : true,
     focus:false
 }
+
+
+window.IdCount = 0;

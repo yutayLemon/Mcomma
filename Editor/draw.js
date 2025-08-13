@@ -11,7 +11,8 @@ function drawDiv({
             font : "sans-serif",
             size : 20,
             color : "black"
-        }
+        },
+        id
 } = {}){
         const Scpos =  Global;
         const Scrad =  radius;
@@ -19,7 +20,7 @@ function drawDiv({
         ctx.strokeStyle = color;
         ctx.lineWidth = lineWdith;
         ctx.arc(Scpos.x, Scpos.y,Scrad, 0, 2 * Math.PI);
-        SpiralText(ctx,txt.context,radius,Global,txt.size,txt.color,txt.font);
+        SpiralText(id ,ctx,txt.context,radius,Global,txt.size,txt.color,txt.font);
         ctx.stroke();
         ctx.strokeStyle = "black";
         ctx.lineWidth = 1;
@@ -35,7 +36,7 @@ function drawCurl({
             font : "sans-serif",
             size : 20,
             color : "black"
-        }
+        },id
 } = {}){
     const Scpos = Global;
     const Scrad = radius;
@@ -91,7 +92,7 @@ function drawCurl({
     );
     }
     ctx.stroke();
-      SpiralText(ctx,txt.context,radius-CurlWidth,Global,txt.size,txt.color,txt.font);
+      SpiralText(id ,ctx,txt.context,radius-CurlWidth,Global,txt.size,txt.color,txt.font);
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 1;
 }

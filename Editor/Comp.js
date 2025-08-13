@@ -1,7 +1,7 @@
 import {drawDiv,drawCurl} from "./draw.js"
 import {circleOverlap} from "./overlap.js"
 import { canvas,ctx } from "./canvas.js"
-import {IntersectionText} from "./textProces.js"
+import {IntersectionText,GeneralToText,CondToText,CurlToText} from "./textProces.js"
 
 
 class Comp{
@@ -27,6 +27,8 @@ class Comp{
         this.vertial = false;
         this.ExtrudingChild = [];
         this.isExtruding = false;
+        this.id;
+        this.SetID();
         
         this.txt = {
             context : "",
@@ -36,6 +38,10 @@ class Comp{
         }
         
     };
+    SetID(){
+        this.id = window.IdCount;
+        window.IdCount++;
+    }
     SetText(txt){
         this.txtCtx = txt;
     }
@@ -43,8 +49,8 @@ class Comp{
         this.initReachSelf();
         this.initRechChildren();
     }
-    log(){
-        logTree(this);
+    log2(){
+        logTree2(this);
     }
     initReachSelf(){
         this.Reached = false;
@@ -97,12 +103,7 @@ class Comp{
     }
    
     toText(){
-        let strFin = "";
-        strFin += this.txt.context;
-        for(const item of this.children){
-            strFin += item.toText();
-        }   
-        return strFin;
+        return GeneralToText(this,"","","",""," ");
     }
     globalPos(){
         if(this.parent == null){
@@ -225,17 +226,10 @@ class overlap extends Comp{//These are vertial
     colideEvent(){
     }
     drawSelf(){
-        console.log(ctx,"test",this.parent.radius,this.Body.radius,this.parent.Global,this.Body.Global);
-        IntersectionText(ctx,"test",this.parent.radius,this.Body.radius,this.parent.Global,this.Body.Global,20,"black");
+        IntersectionText(this.id,ctx,this.txt.context,this.parent.radius,this.Body.radius,this.parent.Global,this.Body.Global,20,"black");
     }
     toText(){
-        let strFin = "cond(";
-        strFin += this.txt.context;
-        for(const item of this.children){
-            strFin += item.toText();
-        }   
-        strFin += ")";
-        return strFin;
+        return CondToText(this);
     }
     colideSelf(){
         if(this.Body.PostColide && this.parent.PostColide){
@@ -381,6 +375,9 @@ class Division extends Comp{
     updateSelf(){
 
     }
+    toText(){
+        return GeneralToText(this,"[div]\n","[/div]",";\n",";\n","  ");
+    }
     drawSelf(){
         drawDiv(this);
     }
@@ -394,13 +391,7 @@ class Curl extends Comp{
         this.CodeComp = true;
     }
      toText(){
-        let strFin = "{";
-        strFin += this.txt.context;
-        for(const item of this.children){
-            strFin += item.toText();
-        }   
-        strFin += "}";
-        return strFin;
+        return CurlToText(this);
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,this.radius,r);
@@ -445,13 +436,16 @@ class PreView{
 }
 
 
-function logTree(node, indent = "") {//pulled from chatGPT
-  const className = node.constructor?.name || "UnknownClass";//pulled from chatGPT
-  console.log(`${indent}- ${className}`);//pulled from chatGPT
 
-  if (Array.isArray(node.children)) {//pulled from chatGPT
-    for (const child of node.children) {//pulled from chatGPT
-      logTree(child, indent + "  ");//pulled from chatGPT
+function logTree2(node, indent = "") {
+  const className = node.constructor?.name || "UnknownClass";
+  if(node.CodeComp){
+  console.log(`${indent}- ${className}`);
+  }
+
+  if (Array.isArray(node.children)) {
+    for (const child of node.children) {
+            logTree2(child, indent + "  ");
     }
   }
 }

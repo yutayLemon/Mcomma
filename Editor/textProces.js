@@ -1,8 +1,8 @@
-
-
-
-
-function SpiralText(ctx,txt="hello world",radius=10,pos={x:0,y:0},size=20,color="black",font="sans-serif"){
+function SpiralText(id,ctx,txt="hello world",radius=10,pos={x:0,y:0},size=20,color="black",font="sans-serif"){
+    if(id != window.TextSetting.elemt.id && txt==""){
+        txt="..Enter Text";
+        color="gray";
+    }
     ctx.save();
     ctx.translate(pos.x, pos.y);
     let Radi = radius;
@@ -30,15 +30,19 @@ function SpiralText(ctx,txt="hello world",radius=10,pos={x:0,y:0},size=20,color=
       }
     }
 
-    if(window.TextSetting.focus){
+    if(id == window.TextSetting.elemt.id){
         Blinker(ctx,Rotation,Radi);
     }
 
     ctx.restore();
 }
 
-function IntersectionText(ctx,txt="hello world",radius=10,r2=10,pos1={x:0,y:0},pos2={x:0,y:0},size=20,color="black",font="sans-serif"){
+function IntersectionText(id,ctx,txt="hello world",radius=10,r2=10,pos1={x:0,y:0},pos2={x:0,y:0},size=20,color="black",font="sans-serif"){
     //r2 is constant
+    if(id != window.TextSetting.elemt.id && txt==""){
+        txt="..Enter Text";
+        color="gray";
+    }
     ctx.save();
     ctx.translate(pos1.x, pos1.y);
     let Radi = radius;
@@ -70,7 +74,7 @@ function IntersectionText(ctx,txt="hello world",radius=10,r2=10,pos1={x:0,y:0},p
       }
     }
 
-    if(window.TextSetting.focus){
+    if(id == window.TextSetting.elemt.id){
         Blinker(ctx,Rotation,Radi);
     }
 
@@ -89,4 +93,45 @@ function Blinker(ctx,Rotation,Radi){
     }
 }
 
-export {SpiralText,IntersectionText};
+function GeneralToText(subject,start,end,thisTxt,seperator,indent){
+        let childStr = "";
+        for(const item of subject.children){
+            let ChildTxt = item.toText();
+            if(ChildTxt != ""){
+                childStr += ChildTxt + seperator;
+            }
+        }   
+        return (start+subject.txt.context+thisTxt+childStr+end);
+}
+function CondToText(subject){
+        let childtxt = ChildrenText(subject);
+        return ("if("+subject.txt.context+";"+childtxt+")");
+}
+
+function CurlToText(subject){
+    let childStr = "";
+    let Overlap = "";
+        for(const item of subject.children){
+            let ChildTxt = item.toText();
+            if(ChildTxt != ""){
+                if(item.class == "overlap"){
+                    Overlap = ChildTxt;
+                }else{
+                    childStr += ChildTxt + ";\n";
+                }
+            }
+        } 
+    return "else " + Overlap + "{\n" + subject.txt.context + childStr +"}\n";
+}
+
+function ChildrenText(subject,seperator=""){
+        let childStr = "";
+        for(const item of subject.children){
+            let ChildTxt = item.toText();
+            if(ChildTxt != ""){
+                childStr += ChildTxt + seperator;
+            }
+        }   
+        return childStr;
+}
+export {SpiralText,IntersectionText,GeneralToText,CondToText,CurlToText};

@@ -17,7 +17,6 @@ function initCanvasClick(){
             }
             //TODO division detection
         }else if(window.EditorState.mode == "edit"){
-            window.TextSetting.focus = true;
             window.TextSetting.elemt = window.TopItems.maxCodeItem;
         }
     });

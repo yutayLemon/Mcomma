@@ -23,7 +23,7 @@ function UpdateCanvas(){
     
     
     window.Componets.Physical.initReach();
-
+    updateText();
     window.Componets.Physical.update();
     window.Componets.Vertial.update();
     //updateDebug(Componets.DebugPhysical);
@@ -31,7 +31,7 @@ function UpdateCanvas(){
     window.Componets.Physical.draw();
     window.Componets.Vertial.draw();
     window.Componets.DebugPhysical.draw();
-
+    
     UpdateMouseInteraction();
     requestAnimationFrame(()=>{UpdateCanvas()});
 }
@@ -67,7 +67,6 @@ function updateDebug(Components){
             } 
         }
 }
-
 
 
 
@@ -127,5 +126,13 @@ function Grid(len){
     let inverseScale = 1/window.GlobalScale;
     ctx.fillRect(0,0,canvas.width,canvas.height);
 }
+
+
+
+function updateText(){
+    let Editor = document.querySelector(".CodeEditor#Mcomma");
+    Editor.innerHTML = window.Componets.Physical.toText();
+}
+
 
 export{canvas,ctx,UpdateCanvas,Grid,initResize,UpdateMouseInteraction};

@@ -5,7 +5,7 @@ import { canvas,ctx ,UpdateCanvas,initResize} from "./canvas.js";
 import {initControl} from "./Controles.js";
 import {initKeyInput,initCanvasHover,initCanvasClick,initCanvasMouseDown,initCanvasMouseUp,initWheelScroll} from "./CanvasClick.js"
 import {InitAssets} from "./draw.js"
-
+import {SpiralText,IntersectionText} from "./textProces.js"
 
 
 initResize();
@@ -29,7 +29,7 @@ function main(){
     MainScope.Vertial = new container(0,0);
     MainScope.DebugPhysical = new container(0,0);
     window.Componets = MainScope;//DEBUG
-    MainScope.Physical.addChild(
+   /* MainScope.Physical.addChild(
        new Division(100,100,"blue",1,50)
     );
     MainScope.Physical.children[0].updateSelf = function(){
@@ -37,7 +37,7 @@ function main(){
         this.pos.x += 1.5;
         this.pos.y += 1;
     }
-
+*/
     //MainScope.Vertial.addChild(new PreView("red"));
 
     UpdateCanvas(Componets);
