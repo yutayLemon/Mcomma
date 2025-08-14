@@ -49,9 +49,6 @@ class Comp{
         this.initReachSelf();
         this.initRechChildren();
     }
-    log2(){
-        logTree2(this);
-    }
     initReachSelf(){
         this.Reached = false;
         this.PostUpdate = false;
@@ -436,18 +433,5 @@ class PreView{
 }
 
 
-
-function logTree2(node, indent = "") {
-  const className = node.constructor?.name || "UnknownClass";
-  if(node.CodeComp){
-  console.log(`${indent}- ${className}`);
-  }
-
-  if (Array.isArray(node.children)) {
-    for (const child of node.children) {
-            logTree2(child, indent + "  ");
-    }
-  }
-}
 
 export {Comp,Division,ExtendInter,MoveInter,debugRect,container,PreView,Curl,InterSect,overlap};
