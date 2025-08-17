@@ -1,3 +1,5 @@
+import {SyntaxTree} from "./SyntaxTree.js"
+
 const canvas = document.querySelector(".MainCanvas");
 const PattCanvas = document.querySelector(".PattenCanvas");
 PattCanvas.width = 30;
@@ -131,7 +133,7 @@ function Grid(len){
 
 function updateText(){
     let Editor = document.querySelector(".CodeEditor#Mcomma");
-    Editor.innerHTML = window.Componets.Physical.toText();
+    Editor.innerHTML = SyntaxTree.DrawTree(window.Componets.Physical);
 }
 
 

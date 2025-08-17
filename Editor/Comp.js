@@ -1,12 +1,13 @@
 import {drawDiv,drawCurl} from "./draw.js"
 import {circleOverlap} from "./overlap.js"
 import { canvas,ctx } from "./canvas.js"
-import {IntersectionText,GeneralToText,CondToText,CurlToText} from "./textProces.js"
+import {IntersectionText} from "./textProces.js"
 
 
 class Comp{
     constructor(initX,initY,icolor,lineWidth){
         this.class;
+        this.SubClass;
         this.mode = "ideal";
         this.selected = false;
         this.pos = {x:initX,y:initY};//relative ??
@@ -99,9 +100,7 @@ class Comp{
         }
     }
    
-    toText(){
-        return GeneralToText(this,"","","",""," ");
-    }
+   
     globalPos(){
         if(this.parent == null){
             return this.pos;
@@ -224,9 +223,6 @@ class overlap extends Comp{//These are vertial
     }
     drawSelf(){
         IntersectionText(this.id,ctx,this.txt.context,this.parent.radius,this.Body.radius,this.parent.Global,this.Body.Global,20,"black");
-    }
-    toText(){
-        return CondToText(this);
     }
     colideSelf(){
         if(this.Body.PostColide && this.parent.PostColide){
@@ -372,9 +368,6 @@ class Division extends Comp{
     updateSelf(){
 
     }
-    toText(){
-        return GeneralToText(this,"[div]\n","[/div]",";\n",";\n","  ");
-    }
     drawSelf(){
         drawDiv(this);
     }
@@ -386,9 +379,6 @@ class Curl extends Comp{
         this.class = "curl";
         this.radius = initradius;
         this.CodeComp = true;
-    }
-     toText(){
-        return CurlToText(this);
     }
     colideSelf(point,r){//takes the point and radius and returns if it is coliding with the object
         return circleOverlap(point,this.Global,this.radius,r);

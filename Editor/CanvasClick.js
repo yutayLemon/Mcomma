@@ -61,6 +61,7 @@ function addNewCurl(){
                 NewCurl = new Curl(window.mousePos.x-button.parent.Global.x,
                                        window.mousePos.y-button.parent.Global.y,
                                        "black",1,radius);
+                NewCurl.SubClass = "if";
                 button.parent.addChild(NewCurl);
                 NewCurl.FlagAsExtruding();
 
@@ -71,6 +72,7 @@ function addNewCurl(){
                 NewCurl = new Curl(window.mousePos.x-button.parent.Global.x,
                                        window.mousePos.y-button.parent.Global.y,
                                        "black",1,radius);
+                NewCurl.SubClass = "ifelse";
                 button.parent.addChild(NewCurl);
                 NewCurl.FlagAsExtruding();
 

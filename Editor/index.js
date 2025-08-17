@@ -6,7 +6,7 @@ import {initControl} from "./Controles.js";
 import {initKeyInput,initCanvasHover,initCanvasClick,initCanvasMouseDown,initCanvasMouseUp,initWheelScroll} from "./CanvasClick.js"
 import {InitAssets} from "./draw.js"
 import {SpiralText,IntersectionText} from "./textProces.js"
-
+import {SyntaxTree} from "./SyntaxTree.js"
 
 initResize();
 initControl();
@@ -23,6 +23,8 @@ Promise.all([InitAssets()])
 })
 
 function main(){
+window.testing = SyntaxTree;//DEBUG
+
     var Componets = {};
     var MainScope = {};
     MainScope.Physical = new container(0,0);

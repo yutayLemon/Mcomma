@@ -93,45 +93,4 @@ function Blinker(ctx,Rotation,Radi){
     }
 }
 
-function GeneralToText(subject,start,end,thisTxt,seperator,indent){
-        let childStr = "";
-        for(const item of subject.children){
-            let ChildTxt = item.toText();
-            if(ChildTxt != ""){
-                childStr += ChildTxt + seperator;
-            }
-        }   
-        return (start+subject.txt.context+thisTxt+childStr+end);
-}
-function CondToText(subject){
-        let childtxt = ChildrenText(subject);
-        return ("if("+subject.txt.context+";"+childtxt+")");
-}
-
-function CurlToText(subject){
-    let childStr = "";
-    let Overlap = "";
-        for(const item of subject.children){
-            let ChildTxt = item.toText();
-            if(ChildTxt != ""){
-                if(item.class == "overlap"){
-                    Overlap = ChildTxt;
-                }else{
-                    childStr += ChildTxt + ";\n";
-                }
-            }
-        } 
-    return "else " + Overlap + "{\n" + subject.txt.context + childStr +"}\n";
-}
-
-function ChildrenText(subject,seperator=""){
-        let childStr = "";
-        for(const item of subject.children){
-            let ChildTxt = item.toText();
-            if(ChildTxt != ""){
-                childStr += ChildTxt + seperator;
-            }
-        }   
-        return childStr;
-}
-export {SpiralText,IntersectionText,GeneralToText,CondToText,CurlToText};
+export {SpiralText,IntersectionText};
