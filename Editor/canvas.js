@@ -25,7 +25,6 @@ function UpdateCanvas(){
     
     
     window.Componets.Physical.initReach();
-    updateText();
     window.Componets.Physical.update();
     window.Componets.Vertial.update();
     //updateDebug(Componets.DebugPhysical);
@@ -133,8 +132,10 @@ function Grid(len){
 
 function updateText(){
     let Editor = document.querySelector(".CodeEditor#Mcomma");
-    Editor.innerHTML = SyntaxTree.DrawTree(window.Componets.Physical);
+    let SynTree = SyntaxTree.Build(window.Componets.Physical);
+    console.log(SynTree);
+    Editor.innerHTML = SyntaxTree.Format(SyntaxTree.DrawTree(window.Componets.Physical));
 }
 
 
-export{canvas,ctx,UpdateCanvas,Grid,initResize,UpdateMouseInteraction};
+export{canvas,ctx,UpdateCanvas,Grid,initResize,UpdateMouseInteraction,updateText};

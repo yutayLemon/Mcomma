@@ -1,5 +1,6 @@
-import {canvas,ctx,UpdateMouseInteraction} from "./canvas.js";
+import {canvas,ctx,UpdateMouseInteraction,updateText} from "./canvas.js";
 import { Division ,ExtendInter,MoveInter,Curl,InterSect,overlap} from "./Comp.js";
+
 
 function initCanvasClick(){
     UpdateMouseInteraction();
@@ -19,6 +20,7 @@ function initCanvasClick(){
         }else if(window.EditorState.mode == "edit"){
             window.TextSetting.elemt = window.TopItems.maxCodeItem;
         }
+        updateText();
     });
     console.log("init:canvas click event");
 }
@@ -157,6 +159,7 @@ function initKeyInput(){
                 break;
         }
     }
+    updateText();
     });
     console.log("init:Key input");
 }
