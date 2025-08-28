@@ -67,10 +67,6 @@ class SyntaxTree{
                 break;
         }
 
-        if(Node.redoTag){
-            txt = `\nlable:for(;;){\n${txt}\n}`;
-        }
-
         return txt;
     }
 
@@ -79,6 +75,56 @@ class SyntaxTree{
         let str = "";
         for(const child of Children){
             str += this.ToMcomma(child);
+        }
+        return str;
+    }
+
+    ToMjs(Node){
+        let mainChild = this.ChildrenToMjs(Node.children[MAIN]);
+        let condChild = this.ChildrenToMjs(Node.children[COND]);
+        let elseChild = this.ChildrenToMjs(Node.children[ELSE]);
+
+        let txt = "";
+        switch(Node.class){
+            case "txt":
+                txt = Node.info.txt;//add children maby
+                break;
+            case "head":
+                txt =  mainChild;
+                break;
+            case "div":
+                txt =  mainChild;
+                break;
+            case "curl":
+                txt =  `{\n${mainChild}\n}`;
+                break;
+            case "if":
+                if(Node.children[2].length == 0){
+                    txt =  `if${condChild}{\n${mainChild}\n}\n`;//c ound of figured out how to do curl
+                }else{
+                    txt =  `if${condChild}{\n${mainChild}\n}else${elseChild}\n`; 
+                }
+                break;
+            case "condition":
+                txt = `(${mainChild})`;
+                break;
+            default:
+                txt = mainChild;
+                break;
+        }
+
+        if(Node.redoTag){
+            txt = `\nlable:for(;;){\n${txt}\n}`;
+        }
+
+        return txt;
+    }
+
+    
+    ChildrenToMjs(Children){
+        let str = "";
+        for(const child of Children){
+            str += this.ToMjs(child);
         }
         return str;
     }

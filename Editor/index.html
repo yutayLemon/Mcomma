@@ -75,29 +75,18 @@
             </div>
 
             <div class="editors-wrap">
-                <section class="editor-section" data-target="Mcomma">
+                <section class="editor-sectionMcomma" data-target="Mcomma">
                     <header class="editor-header" tabindex="0" role="button" aria-expanded="true">
                         <span>M,</span>
                         <button class="toggle-btn" aria-hidden="true">▾</button>
                     </header>
-                    <div class="CodeEditor" id="Mcomma" contenteditable="true" spellcheck="false" data-lang="javascript">
-                        // Write your Mcomma code here
-                        function greet() {
-                            let name = "world";
-                            console.log(`Hello ${name}`);
-                        }
-                    </div>
                 </section>
 
-                <section class="editor-section" data-target="Mjs">
+                <section class="editor-sectionMjs" data-target="Mjs">
                     <header class="editor-header" tabindex="0" role="button" aria-expanded="true">
                         <span>M.js</span>
                         <button class="toggle-btn" aria-hidden="true">▾</button>
                     </header>
-                    <div class="CodeEditor" id="Mjs" contenteditable="true" spellcheck="false" data-lang="javascript">
-                        // Write your JavaScript code here
-                        const sum = (a, b) => a + b;
-                        console.log(sum(2, 3));
                     </div>
                 </section>
             </div>
@@ -107,22 +96,7 @@
     </main>
 
     <script>
-        // ========== editor collapse toggles ==========
-        document.querySelectorAll('.editor-section .editor-header').forEach(header => {
-            const section = header.closest('.editor-section');
-            const targetId = section.getAttribute('data-target');
-            header.addEventListener('click', () => {
-                const editor = document.getElementById(targetId);
-                const collapsed = editor.classList.toggle('collapsed');
-                header.setAttribute('aria-expanded', String(!collapsed));
-            });
-            header.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    header.click();
-                }
-            });
-        });
+        
 
         // ========== dark mode toggle (SVG swap + initial state) ==========
         const darkToggle = document.getElementById('darkModeToggle');
@@ -167,34 +141,7 @@
         applyResponsiveDefault();
 
         // ========== simple syntax highlighting (light-weight) ==========
-        function highlightCode(el) {
-            const lang = el.dataset.lang;
-            if (lang === "javascript") {
-                // use innerText so HTML tags are not double-escaped
-                let raw = el.innerText;
-                // escape HTML to be safe
-                raw = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-                let html = raw
-                    .replace(/(\/\/.*)/g, '<span class="token comment">$1</span>')
-                    .replace(/(\b(function|return|let|const|var|if|else|for|while|class|new|this|const|=>)\b)/g, '<span class="token keyword">$1</span>')
-                    .replace(/("[^"]*"|'[^']*'|`[^`]*`)/g, '<span class="token string">$1</span>')
-                    .replace(/\b(\d+)\b/g, '<span class="token number">$1</span>')
-                    .replace(/\b([a-zA-Z_]\w*)(?=\s*\()/g, '<span class="token function">$1</span>');
-                el.innerHTML = html;
-            }
-        }
-
-        document.querySelectorAll('.CodeEditor').forEach(editor => {
-            // initial highlight
-            highlightCode(editor);
-
-            // re-highlight on input; slight debounce to reduce flicker
-            let t;
-            editor.addEventListener('input', () => {
-                clearTimeout(t);
-                t = setTimeout(() => highlightCode(editor), 150);
-            });
-        });
+        
     </script>
         <script src="Global.js"></script>
         <script type="module" src="./overlap.js"></script>
@@ -205,5 +152,6 @@
         <script type="module" src="./draw.js"></script>
         <script type="module" src="./textProces.js"></script>
         <script type="module" src="./SyntaxTree.js"></script>
+        <script type="module" src="./Editor.js"></script>
 </body>
 </html>

@@ -146,30 +146,6 @@ body.dark-mode .icon-btn svg {
     cursor:pointer;
     background: linear-gradient(90deg,var(--blonde),#fff);
 }
-.CodeEditor {
-    padding: 0.6rem 0.8rem;
-    font-family: var(--mono);
-    font-size: 13px;
-    overflow: hidden; /* hide contents during animation */
-    white-space: pre-wrap;
-    background: rgba(0,0,0,0.02);
-    height: auto;
-    max-height: 260px;
-    opacity: 1;
-    transition:
-        max-height 0.3s ease,
-        opacity 0.3s ease,
-        padding 0.3s ease;
-}
-
-.CodeEditor.collapsed {
-    max-height: 0;
-    opacity: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border: none;
-}
-
 /* syntax highlighting tokens */
 .token.keyword { color: #d73a49; font-weight: 500; }
 .token.string { color: #032f62; }

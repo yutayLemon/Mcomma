@@ -1,4 +1,5 @@
 import {SyntaxTree,Mcomma} from "./SyntaxTree.js"
+import {Editors} from "./Editor.js"
 
 const canvas = document.querySelector(".MainCanvas");
 const PattCanvas = document.querySelector(".PattenCanvas");
@@ -130,11 +131,14 @@ function Grid(len){
 
 
 function updateText(){
-    let Editor = document.querySelector(".CodeEditor#Mcomma");
     let SynTree = new SyntaxTree("Draw",window.Componets.Physical);
-    console.log(SynTree);
-    //Editor.innerHTML = Mcomma.Format(SynTree.ToMcomma(SynTree.head));
-    Editor.innerHTML = SynTree.ToMcomma(SynTree.head);
+    console.log(SynTree);//DEBUG
+    Editors.Mcomma.dispatch({
+         changes: { from: 0, to: Editors.Mcomma.state.doc.length, insert: SynTree.ToMcomma(SynTree.head)}
+    });
+    Editors.Mjs.dispatch({
+         changes: { from: 0, to: Editors.Mjs.state.doc.length, insert: SynTree.ToMjs(SynTree.head)}
+    });
 }
 
 
