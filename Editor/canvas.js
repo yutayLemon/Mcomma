@@ -133,7 +133,8 @@ function updateText(){
     let Editor = document.querySelector(".CodeEditor#Mcomma");
     let SynTree = new SyntaxTree("Draw",window.Componets.Physical);
     console.log(SynTree);
-    Editor.innerHTML = Mcomma.Format(SynTree.ToMcomma(SynTree.head));
+    //Editor.innerHTML = Mcomma.Format(SynTree.ToMcomma(SynTree.head));
+    Editor.innerHTML = SynTree.ToMcomma(SynTree.head);
 }
 
 

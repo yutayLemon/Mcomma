@@ -37,26 +37,41 @@ class SyntaxTree{
         let mainChild = this.ChildrenToMcomma(Node.children[MAIN]);
         let condChild = this.ChildrenToMcomma(Node.children[COND]);
         let elseChild = this.ChildrenToMcomma(Node.children[ELSE]);
+
+        let txt = "";
         switch(Node.class){
             case "txt":
-                return Node.info.txt;//add children maby
+                txt = Node.info.txt;//add children maby
+                break;
             case "head":
-                return mainChild;
+                txt =  mainChild;
+                break;
             case "div":
-                return mainChild;
+                txt =  mainChild;
+                break;
             case "curl":
-                return `{${mainChild}}`;
+                txt =  `{\n${mainChild}\n}`;
+                break;
             case "if":
-                if(Node.children[2] == undefined){
-                    return `if${condChild}{${mainChild}}`;//c ound of figured out how to do curl
+                if(Node.children[2].length == 0){
+                    txt =  `if${condChild}{\n${mainChild}\n}\n`;//c ound of figured out how to do curl
                 }else{
-                    return `if${condChild}{${mainChild}}else${elseChild}`; 
+                    txt =  `if${condChild}{\n${mainChild}\n}else${elseChild}\n`; 
                 }
+                break;
             case "condition":
-                return `(${mainChild})`;
+                txt = `(${mainChild})`;
+                break;
             default:
-                return mainChild;
+                txt = mainChild;
+                break;
         }
+
+        if(Node.redoTag){
+            txt = `\nlable:for(;;){\n${txt}\n}`;
+        }
+
+        return txt;
     }
 
     
