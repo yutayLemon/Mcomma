@@ -1,12 +1,16 @@
-
+const MAIN = 0;
+const COND = 1;
+const ELSE = 2;
+const REDOPARM = 1;
 
 class SyntaxNode{
     constructor(){
-        this.class;
+        this.class = "";
         this.info = {}
-        this.parent;
-        this.children = [[]];//2 dimentional
-        this.layer;
+        this.parent = null;
+        this.children = [[],[],[]];//2 dimentional
+        this.layer = 0;
+        this.redoTag = false;
     };
     addChild(child,group){
         child.parent = this;
@@ -18,104 +22,134 @@ class SyntaxNode{
     }
 }
 
-function DrawObjToSyntax(obj){
-    let TreeHead = new SyntaxNode();
-    TreeHead.class = "head";
-    SingleDrawObjToSyntax(obj,TreeHead);
-    PropagateLayer(TreeHead,0);
+class SyntaxTree{
+    constructor(type,obj){
+        this.head = new SyntaxNode();
+        this.head.class = "head";
+        this.head.layer = 0;
 
-    return TreeHead;
+        if(type == "Draw"){
+            SelfFromDrawObj(obj,this.head);
+        }
+    }
+
+    ToMcomma(Node){
+        let mainChild = this.ChildrenToMcomma(Node.children[MAIN]);
+        let condChild = this.ChildrenToMcomma(Node.children[COND]);
+        let elseChild = this.ChildrenToMcomma(Node.children[ELSE]);
+        switch(Node.class){
+            case "txt":
+                return Node.info.txt;//add children maby
+            case "head":
+                return mainChild;
+            case "div":
+                return mainChild;
+            case "curl":
+                return `{${mainChild}}`;
+            case "if":
+                if(Node.children[2] == undefined){
+                    return `if${condChild}{${mainChild}}`;//c ound of figured out how to do curl
+                }else{
+                    return `if${condChild}{${mainChild}}else${elseChild}`; 
+                }
+            case "condition":
+                return `(${mainChild})`;
+            default:
+                return mainChild;
+        }
+    }
+
+    
+    ChildrenToMcomma(Children){
+        let str = "";
+        for(const child of Children){
+            str += this.ToMcomma(child);
+        }
+        return str;
+    }
 }
 
-
-function SingleDrawObjToSyntax(obj,parent){// obj DrawObject      parent Syntax object to tack on to
-    //addchild new node , group to send to
-    if(!obj.CodeComp){
-        ChildrenSyntax(obj.children,parent);
+function SelfFromDrawObj(obj,parent){// obj DrawObject      parent Syntax object to tack on to
+                                //addchild new node , group to send to
+    if(!obj.CodeComp){//skip
+        ChildrenFromDrawObj(obj.children,parent);
         return 0;
     }
+        
+
+    let NewNode = new SyntaxNode();
+    NewNode.layer = parent.layer;
+
+    let Destination = MAIN;
+    switch(obj.class+":"+obj.SubClass){
+        case "curl:ifelse":
+                NewNode.class = "curl";
+                Destination = ELSE;
+                break;
+        case "curl:if":
+                NewNode.class = "if";
+                NewNode.layer++;
+                break;
+        case "curl:":
+                NewNode.class = "curl";
+                NewNode.layer++;
+                break;
+        case "overlap:":
+                NewNode.class = "condition";
+                Destination = COND;
+                break;
+        case "div:":
+                NewNode.class = "div";
+                NewNode.layer++;
+                break;
+        default:
+                NewNode.class = "div";
+                NewNode.layer++;
+                break;
+
+    }
+        
+    parent.addChild(NewNode,Destination);
+
     let TextNode = new SyntaxNode(obj.txt.context);
     TextNode.info.txt = obj.txt.context;
     TextNode.class = "txt";
-    let NewNode = new SyntaxNode();
-    if(obj.class == "curl" && obj.SubClass == "ifelse"){
-        NewNode.class = "curl";
-        parent.addChild(NewNode,2);
-    }else if(obj.class == "curl" && obj.SubClass == "if"){
-        NewNode.class = "if";
-        parent.addChild(NewNode,0);//TODO FIX UP
-    }else if(obj.class == "div"){
-        NewNode.class = "div";
-        parent.addChild(NewNode,0);//group 0 main body, group 1 conditionals ,group 2 else body
-    }else if(obj.class == "overlap"){
-        NewNode.class = "condition";
-        parent.addChild(NewNode,1);
-    }else if(obj.class == "curl"){
-        NewNode.class = "curl";
-        parent.addChild(NewNode,0);
-    }else{
-        NewNode.class = "div";
-        parent.addChild(NewNode,0);
+    TextNode.layer = NewNode.layer;
+    NewNode.addChild(TextNode,MAIN);
+
+
+    //propagate up//TODO clean up
+    const redoMatches = [...obj.txt.context.matchAll(/\bredo(?:\.(\d+))?\b/g)];
+    for(const item of redoMatches){
+        AddRedoTag(item[REDOPARM],parent);//layer is not added fix TODO
     }
-    NewNode.addChild(TextNode,0);
-    ChildrenSyntax(obj.children,NewNode);
+
+    ChildrenFromDrawObj(obj.children,NewNode);
     return 0;
 }
-
-function ChildrenSyntax(children,parent){
-    for(let i = 0;i<children.length;i++){
-        SingleDrawObjToSyntax(children[i],parent);
-    }
-}
-
-function PropagateLayer(SyntaxTreeHead,layer){
-    SyntaxTreeHead.children[0] ? PropagateChildLayer(SyntaxTreeHead.children[0],layer):null;
-    SyntaxTreeHead.children[1] ? PropagateChildLayer(SyntaxTreeHead.children[1],layer):null;
-    SyntaxTreeHead.children[2] ? PropagateChildLayer(SyntaxTreeHead.children[2],layer):null;
-}
-
-function PropagateChildLayer(children,layer){
-    for(const item of children){
-        if(item.class == "div" || (item.class == "if" || item.class == "curl")){   
-        item.layer = layer+1;
-        PropagateLayer(item,layer+1);
-        }else{
-        item.layer = layer;
-        PropagateLayer(item,layer);
-        }
-    }
-}
-
-
-function AddRedoTag(){
     
+function ChildrenFromDrawObj(children,parent){
+        for(let i = 0;i<children.length;i++){
+            SelfFromDrawObj(children[i],parent);
+        }
 }
 
-function SyntaxTreeToMcomma(Node){
-    switch(Node.class){
-        case "txt":
-            return Node.info.txt;//add children maby
-        case "head":
-            return ChildToMcomma(Node.children[0]);
-        case "div":
-            return ChildToMcomma(Node.children[0]) + ";";
-        case "curl":
-            return "{"+ChildToMcomma(Node.children[0])+"}";
-        case "if":
-            if(Node.children[2] == undefined){
-                return "if " + ChildToMcomma(Node.children[1]) + "{"+ ChildToMcomma(Node.children[0]) +"}";//c ound of figured out how to do curl
-            }else{
-                return "if " + ChildToMcomma(Node.children[1]) +"{"+ ChildToMcomma(Node.children[0]) +"}"+ "else" + ChildToMcomma(Node.children[2]); 
-            }
-        case "condition":
-            return "("+ChildToMcomma(Node.children[0])+")";
-        default:
-            return ChildToMcomma(Node.children[0]);
-    }
+function AddRedoTag(backStep,Node){
+        let currentNode = Node;
+        let goalLayer = Node.layer - backStep;
+        while(currentNode.parent != null && currentNode.parent.layer >= goalLayer){
+            currentNode = currentNode.parent;
+        }
+        currentNode.redoTag = true;
+}
+
+function DrawObjToMcomma(obj){
+    let NewSyntax = new SyntaxTree("Draw",obj);
+    return NewSyntax.ToMcomma(NewSyntax.head);
 }
 
 
-function AddWhiteSpaceMcomma(str){
+function McommaAddWhiteSpace(str){
     let finstr = "";
     let Spacing = " ";
     let SpacingCount = 0;
@@ -133,40 +167,20 @@ function AddWhiteSpaceMcomma(str){
         }
 
         if(CondNewLine){
-            str += "\n";
+            finstr += "\n";
             for(let j = 0;j<SpacingCount;j++){
-                str += Spacing;
+                finstr += Spacing;
             }
         }else{
             if((CondBraketE || CondBraketS) || CondSemiColen){
-                finstr+="\n";
+                finstr += "\n";
             }
         }
     }
     return finstr;
 }
 
-
-
-function ChildToMcomma(Children){
-    let str = "";
-    for(let i = 0;i<Children.length;i++){
-       // str += SyntaxTreeToMcomma(Children[i]);
-        str += SyntaxTreeToMcomma(Children[i]);
-    }
-    return str;
-}
-
-function DrawObjToMcomma(obj){
-    let SyntaxHead = DrawObjToSyntax(obj);
-    return SyntaxTreeToMcomma(SyntaxHead);
-}
-
-
-let SyntaxTree = {};
-SyntaxTree.ToMcomma = SyntaxTreeToMcomma;
-SyntaxTree.Build = DrawObjToSyntax;
-SyntaxTree.DrawTree = DrawObjToMcomma;
-SyntaxTree.Format = AddWhiteSpaceMcomma;
-
-export {SyntaxTree}
+let Mcomma = {};
+Mcomma.Format = McommaAddWhiteSpace;
+Mcomma.DrawObj = DrawObjToMcomma;
+export {SyntaxTree,Mcomma}

@@ -1,13 +1,13 @@
 import {drawDiv,drawCurl} from "./draw.js"
 import {circleOverlap} from "./overlap.js"
-import { canvas,ctx } from "./canvas.js"
+import {canvas,ctx } from "./canvas.js"
 import {IntersectionText} from "./textProces.js"
 
 
 class Comp{
     constructor(initX,initY,icolor,lineWidth){
-        this.class;
-        this.SubClass;
+        this.class = "";
+        this.SubClass = "";
         this.mode = "ideal";
         this.selected = false;
         this.pos = {x:initX,y:initY};//relative ??

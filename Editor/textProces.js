@@ -21,11 +21,7 @@ function SpiralText(id,ctx,txt="hello world",radius=10,pos={x:0,y:0},size=20,col
       }
       let RadiCovered = LineLen / Radi;
       Rotation = -RadiCovered*0.5;
-      for (let j = 0; j < LineArr[i].length; j++) {
-        let res = RenderNextChar(ctx,Rotation,LineArr[i],j,Radi);
-        Rotation = res.Rotate;
-        j = res.i;
-      }
+      let res = RenderNextChar(ctx,Rotation,LineArr[i],Radi);
     }
 
     if(id == window.TextSetting.elemt.id){
@@ -63,11 +59,8 @@ function IntersectionText(id,ctx,txt="hello world",radius=10,r2=10,pos1={x:0,y:0
       }
       let RadiCovered = LineLen / Radi;
       Rotation = -RadiCovered*0.5+OffsetAngle;
-      for (let j = 0; j < LineArr[i].length; j++) {
-        let res = RenderNextChar(ctx,Rotation,LineArr[i],j,Radi);
-        Rotation = res.Rotate;
-        j = res.i;
-      }
+      let res = RenderNextChar(ctx,Rotation,LineArr[i],Radi);
+        
     }
 
     if(id == window.TextSetting.elemt.id){
@@ -77,23 +70,27 @@ function IntersectionText(id,ctx,txt="hello world",radius=10,r2=10,pos1={x:0,y:0
     ctx.restore();
 }
 
-function RenderNextChar(ctx,Rotation,str,index,Radi){//returns new roation
-    ctx.save();
-    ctx.rotate(Rotation);
+function RenderNextChar(ctx,Rotation,str,Radi){//returns new roation
+    for (let j = 0; j < str.length; j++) {
 
-    if(str[index] == 'r' && str.slice(index,index+4) == "redo"){
-        let RedoDim = ctx.measureText("%").width*3;
-        ctx.drawImage(window.assets.redo.canvas,0-RedoDim*0.5,-Radi-RedoDim*0.5,RedoDim,RedoDim)
-        Rotation+=RedoDim/Radi
-        index += 4;
-    }else{
-        ctx.fillText(str[index], 0, -Radi);
-        Rotation+=ctx.measureText(str[index]).width/Radi
+        ctx.save();
+        ctx.rotate(Rotation);
+
+        if(str[j] == 'r' && str.slice(j,j+4) == "redo"){
+            let RedoDim = ctx.measureText("%").width*3;
+            ctx.drawImage(window.assets.redo.canvas,0-RedoDim*0.5,-Radi-RedoDim*0.5,RedoDim,RedoDim)
+            Rotation+=RedoDim/Radi
+            j += 4;
+        }else{
+            ctx.fillText(str[j], 0, -Radi);
+            Rotation+=ctx.measureText(str[j]).width/Radi
+        }
+
+
+        ctx.restore();
     }
-
-
-    ctx.restore();
-    return  {Rotate:Rotation,i:index};
+    
+    //return  {Rotate:Rotation,i:index};
 }
 
 function Blinker(ctx,Rotation,Radi){
